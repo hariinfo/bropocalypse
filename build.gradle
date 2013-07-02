@@ -67,6 +67,13 @@ test {
     }
 }
 
+intTest {
+  useTestNG()
+  options {
+    includeGroups 'int'
+  }
+}
+
 task testPerformance (type: Test) {
   maxHeapSize = '1024m'
   useTestNG()

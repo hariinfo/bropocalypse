@@ -1,16 +1,17 @@
 package com.statement.commerce.dao.mongo;
 
 import com.mongodb.WriteResult;
+import com.statement.commerce.dao.GenericDao;
+import com.statement.commerce.dao.MerchantDao;
 import com.statement.commerce.model.core.Address;
 import com.statement.commerce.model.core.Merchant;
 import com.statement.commerce.model.core.ObjectForIdNotFoundException;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.stereotype.Repository;
-import org.springframework.data.mongodb.core.query.Update;
 
-import static com.statement.commerce.dao.mongo.DaoConstants.DBOBJECT_ID;
-import static com.statement.commerce.dao.mongo.DaoConstants.REGEX_BOUNDARY;
+import static com.statement.commerce.dao.mongo.MongoDaoConstants.DBOBJECT_ID;
+import static com.statement.commerce.dao.mongo.MongoDaoConstants.REGEX_BOUNDARY;
 import static org.springframework.data.mongodb.core.query.Order.ASCENDING;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Update.update;
@@ -18,8 +19,8 @@ import static org.springframework.data.mongodb.core.query.Update.update;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-@Repository
-public class MerchantDao extends MongoDao
+@Repository("MongoMerchantDao")
+public class MongoMerchantDao extends MongoDao implements MerchantDao<Merchant>
 {
   public static final String MERCHANT_COLLECTION = "MerchantCollection";
   private static final String NAME_FIELD = "name";
@@ -35,6 +36,7 @@ public class MerchantDao extends MongoDao
     }
   }
 
+  @Override
   public void save(Merchant merchant)
   {
     if(null == merchant)
@@ -45,6 +47,7 @@ public class MerchantDao extends MongoDao
     mongoTemplate.save(merchant, MERCHANT_COLLECTION);
   }
 
+  @Override
   public void delete(String... ids)
   {
     if ((null == ids) || (ids.length < 1))
@@ -55,6 +58,7 @@ public class MerchantDao extends MongoDao
     mongoTemplate.remove(new Query(where(DBOBJECT_ID).in(ids)),  Merchant.class);
   }
 
+  @Override
   public List<Merchant> getByIds(String... ids)
   {
     if ((null == ids) || (ids.length < 1))
@@ -67,6 +71,7 @@ public class MerchantDao extends MongoDao
     return getMerchantsInternal(query);
   }
 
+  @Override
   public List<Merchant> findByName(String name)
   {
     Query query = new Query(where(NAME_FIELD).regex(REGEX_BOUNDARY + name + REGEX_BOUNDARY));

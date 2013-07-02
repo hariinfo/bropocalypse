@@ -3,7 +3,7 @@ package com.statement.commerce.model.core;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import static com.statement.commerce.dao.mongo.MerchantDao.MERCHANT_COLLECTION;
+import static com.statement.commerce.dao.mongo.MongoMerchantDao.MERCHANT_COLLECTION;
 
 import java.io.Serializable;
 import java.util.Collection;

@@ -4,9 +4,7 @@ import com.statement.commerce.context.AppContext;
 import com.statement.commerce.context.LocalProfile;
 import com.statement.commerce.dao.mongo.factory.MerchantFactory;
 import com.statement.commerce.model.core.Address;
-import com.statement.commerce.model.core.Country;
 import com.statement.commerce.model.core.Merchant;
-import com.statement.commerce.model.core.Provence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -21,10 +19,10 @@ import java.util.List;
 
 @ActiveProfiles(profiles = { "LocalEnv" })
 @ContextConfiguration(classes = { AppContext.class, LocalProfile.class })
-public class MerchantDaoIntTest extends AbstractTestNGSpringContextTests
+public class MongoMerchantDaoIntTest extends AbstractTestNGSpringContextTests
 {
   @Autowired
-  private MerchantDao merchantDao;
+  private MongoMerchantDao merchantDao;
   private List<Merchant> deleteList = new ArrayList<>();
 
   @AfterTest(groups = "int")
