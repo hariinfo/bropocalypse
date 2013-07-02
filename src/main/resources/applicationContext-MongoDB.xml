@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+       xsi:schemaLocation="http://www.springframework.org/schema/context
+          http://www.springframework.org/schema/context/spring-context-3.1.xsd
+          http://www.springframework.org/schema/data/mongo
+          http://www.springframework.org/schema/data/mongo/spring-mongo-1.0.xsd
+          http://www.springframework.org/schema/beans
+          http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+  <beans profile="LocalEnv,MongoSingle">
+    <mongo:mongo id="ecommerce" host="${mongodb.host}" port="${mongodb.port}" >
+      <mongo:options connections-per-host="50"
+                     threads-allowed-to-block-for-connection-multiplier="10"
+                     connect-timeout="2000"
+                     auto-connect-retry="true"
+                     socket-keep-alive="true"
+                     socket-timeout="60000"
+                     write-number="1"
+                     write-timeout="0"
+                     max-wait-time="120000"
+          />
+    </mongo:mongo>
+
+    <mongo:db-factory id="mongoDbFactory" dbname="ecommerce" mongo-ref="ecommerce" />
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+      <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
+    </bean>
+
+    <!-- spring default assortment mongo application database support -->
+    <!--<mongo:db-factory id="defaultAssortmentDbFactory" dbname="ecommerce" mongo-ref="ecommerce"/>-->
+    <!--<bean id="defaultAssortmentMongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">-->
+      <!--<constructor-arg name="mongoDbFactory" ref="defaultAssortmentDbFactory"/>-->
+    <!--</bean>-->
+
+    <!-- spring mongo queue database support -->
+    <!--<mongo:db-factory id="mongoQueueDbFactory" dbname="ecommerceQueue" mongo-ref="ecommerce"/>-->
+    <!--<bean id="mongoQueueTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">-->
+      <!--<constructor-arg name="mongoDbFactory" ref="mongoQueueDbFactory"/>-->
+    <!--</bean>-->
+
+  </beans>
+
+  <beans profile="MongoReplica">
+    <mongo:mongo id="ecommerceReplica" replica-set="${mongodb.host}">
+      <mongo:options connections-per-host="100"
+                     threads-allowed-to-block-for-connection-multiplier="10"
+                     connect-timeout="2000"
+                     max-wait-time="120000"
+                     auto-connect-retry="true"
+                     socket-keep-alive="true"
+                     socket-timeout="60000"
+                     write-number="1"
+                     write-timeout="0"
+                     write-fsync="true"/>
+    </mongo:mongo>
+
+    <!-- spring mongo application database support -->
+    <mongo:db-factory id="mongoReplicaDbFactory" dbname="ecommerce" mongo-ref="ecommerceReplica"/>
+    <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+      <constructor-arg name="mongoDbFactory" ref="mongoReplicaDbFactory"/>
+    </bean>
+
+    <!-- spring default assortment mongo application database support -->
+    <mongo:db-factory id="defaultAssortmentReplicaDbFactory" dbname="ecommerce" mongo-ref="ecommerceReplica"/>
+    <bean id="defaultAssortmentMongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+      <constructor-arg name="mongoDbFactory" ref="defaultAssortmentReplicaDbFactory"/>
+    </bean>
+
+    <!-- spring mongo queue database support -->
+    <mongo:db-factory id="mongoReplicaQueueDbFactory" dbname="ecommerceQueue" mongo-ref="ecommerceReplica"/>
+    <bean id="mongoQueueTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+      <constructor-arg name="mongoDbFactory" ref="mongoReplicaQueueDbFactory"/>
+    </bean>
+  </beans>
+
+  <beans>
+    <context:annotation-config/>
+
+    <!-- safe write concern for single database instances without journaling (-nojournal) support (vagrant VM for local development) -->
+    <bean id="safeWriteConcern" class="com.mongodb.WriteConcern">
+      <constructor-arg type="int" value="1" />
+    </bean>
+
+    <!-- journal-safe write concern for single database instances with journaling enabled (by default, use -nojournal to disable) -->
+    <bean id="journalSafeWriteConcern" class="com.mongodb.WriteConcern">
+      <constructor-arg type="int" value="1" />
+      <constructor-arg type="int" value="0" />
+      <constructor-arg type="boolean" value="false" />
+      <constructor-arg type="boolean" value="true" />
+    </bean>
+
+    <!-- default write concern for replicated databases -->
+    <bean id="replicaSafeWriteConcern" class="com.mongodb.WriteConcern">
+      <constructor-arg type="int" value="2" />
+    </bean>
+  </beans>
+</beans>

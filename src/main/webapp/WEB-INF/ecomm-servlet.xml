@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:cache="http://www.springframework.org/schema/cache"
+       xmlns:p="http://www.springframework.org/schema/p"
+
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                           http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context-3.1.xsd
+                           http://www.springframework.org/schema/mvc
+                           http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+                           http://www.springframework.org/schema/cache
+       		               http://www.springframework.org/schema/cache/spring-cache.xsd">
+
+
+  <!-- Activates scanning for Components - controller layer only-->
+  <context:component-scan base-package="com.statement.commerce.controller"/>
+
+  <!-- Explicitly enables the Spring MVC @Controller programming model -->
+  <mvc:annotation-driven />
+
+  <mvc:interceptors>
+    <bean id="webContentInterceptor" class="org.springframework.web.servlet.mvc.WebContentInterceptor">
+      <property name="cacheSeconds" value="0"/>
+      <property name="useExpiresHeader" value="true"/>
+      <property name="useCacheControlHeader" value="true"/>
+      <property name="useCacheControlNoStore" value="true"/>
+    </bean>
+  </mvc:interceptors>
+  <mvc:default-servlet-handler />
+
+  <beans>
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+      <property name="prefix" value="/WEB-INF/jsp/"/>
+      <property name="suffix" value=".jsp"/>
+    </bean>
+  </beans>
+  <!-- cache implementation to use by the spring caching abstraction -->
+  <beans profile="EnableCaching">
+
+    <!-- explicitly enables the spring cache abstraction -->
+    <cache:annotation-driven/>
+
+    <!-- spring simple cache manager -->
+    <!--<bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">-->
+    <!--<property name="caches">-->
+    <!--<set>-->
+    <!--<bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="users"/>-->
+    <!--<bean class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" p:name="assortments"/>-->
+    <!--</set>-->
+    <!--</property>-->
+    <!--</bean>-->
+
+    <!-- ehcache manager -->
+    <!--<bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager" p:cacheManager-ref="ehcache"/>-->
+    <!-- Ehcache library setup -->
+    <!--<bean id="ehcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" p:configLocation="classpath:ehcache.xml"/>-->
+  </beans>
+
+</beans>
