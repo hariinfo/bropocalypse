@@ -67,7 +67,7 @@ test {
     }
 }
 
-intTest {
+task intTest (type: Test)  {
   useTestNG()
   options {
     includeGroups 'int'
