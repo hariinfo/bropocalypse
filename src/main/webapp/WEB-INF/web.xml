@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
-  <display-name>statementcommerce</display-name>
+  <display-name>bropocalypse</display-name>
 
   <!--
     - Location of the XML file that defines the root application context
@@ -32,7 +32,7 @@
        specified for component-scanning -->
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>com.nike.das</param-value>
+    <param-value>com.statement.commerce</param-value>
   </context-param>
 
 
@@ -69,13 +69,13 @@
     - Provides core MVC application controller. See *-servlet.xml.
     -->
   <servlet>
-    <servlet-name>ecomm</servlet-name>
+    <servlet-name>bropocalypse</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
     <load-on-startup>1</load-on-startup>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>ecomm</servlet-name>
+    <servlet-name>bropocalypse</servlet-name>
     <!--<url-pattern>*.html</url-pattern>-->
     <url-pattern>*.json</url-pattern>
   </servlet-mapping>
