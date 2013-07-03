@@ -1,0 +1,15 @@
+
+body {
+    font-family: Copperplate Light, sans-serif;
+}
+
+.webservice{padding: 7px}
+
+#content {
+    margin: 5em auto;
+    width: 40em;
+}
+
+.securityHiddenUI, .securityHiddenUI * {
+    background-color: #ff4500;
+}

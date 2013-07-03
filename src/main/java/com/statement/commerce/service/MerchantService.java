@@ -40,7 +40,7 @@ public class MerchantService
     return merchantDao.findByName(nameSearchString);
   }
 
-  public void delete(String ids)
+  public void delete(String... ids)
   {
     merchantDao.delete(ids);
   }

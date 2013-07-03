@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Merchant</title>
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="/bropocalypse/static/css/admin.css"/>
+    <script src="/bropocalypse/static/js/jquery-1.7.1.min.js"></script>
+    <script src="/bropocalypse/static/js/jquery.autosize.js"></script>
+    <script src="/bropocalypse/static/js/admin.js"></script>
+    <script type="text/javascript">
+        var createMerchant = function() {
+            var form = $("#createMerchant");
+            var merchantJson = $(".merchantJson", form).val();
+            var url = "/bropocalypse/v1/merchant.json";
+            post(url, merchantJson);
+        };
+        var createMerchantByName = function() {
+            var form = $("#createMerchantByName");
+            var merchantName = $(".merchantName", form).val();
+            var url = "/bropocalypse/v1/merchant/name.json";
+            post(url, merchantName);
+        };
+        var getMerchantById = function () {
+            var form = $("#getMerchantById");
+            var merchantIds = $(".merchantId", form).val();
+            var url = "/bropocalypse/v1/merchant/" +merchantIds+ ".json";
+            get(url);
+        };
+        var putMerchantAddress = function () {
+            var form = $("#putMerchantAddress");
+            var merchantId = $(".merchantId", form).val();
+            var address = $(".address", form).val();
+            var url = "/bropocalypse/v1/merchant/" +merchantId+ "/address.json";
+            put (url, address);
+        }
+        var deleteMerchantsByIds = function () {
+            var form = $("#deleteMerchantsByIds");
+            var merchantIds = $(".merchantIds", form).val();
+            var url = "/bropocalypse/v1/merchant/" + merchantIds + ".json";
+            del(url);
+        };
+
+    </script>
+</head>
+<body>
+<h3><a href="webservices.html">Web Services</a> </h3>
+
+<div class="webservice">
+    Create new Merchant</br>
+    URL = /bropocalypse/v1/merchant.json
+    <form id="createMerchant">
+        <table>
+            <tr>
+                <td>Merchant JSON: <textarea id="merchantJson" class="merchantJson" name="merchantJson" cols="50" rows="15">
+{
+"name": "Merchant 1",
+"billingAddress": {"name": "Primary Address","address1": "12 Hollywood Ave","city": "Portland","provence": "OREGON","country": "US","zipCode": "97212"}
+}
+                </textarea></td>
+            </tr>
+            <tr>
+                <td><input onclick="createMerchant()" value="POST" type=button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div class="webservice">
+    Create new Merchant by Name</br>
+    URL = /bropocalypse/v1/merchant/name.json
+    <form id="createMerchantByName">
+        <table>
+            <tr>
+                <td>Merchant Name: <input type="text" class="merchantName" name="merchantName" value=""></td>
+            </tr>
+            <tr>
+                <td><input onclick="createMerchantByName()" value="POST" type=button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div class="webservice">
+    Get Merchant by id</br>
+    URL = /bropocalypse/v1/merchant/{id}.json
+    <form id="getMerchantById">
+        <table>
+            <tr>
+                <td>Merchant Id: <input class="merchantId" name="merchantId" value=""></td>
+            </tr>
+            <tr>
+                <td><input onclick="getMerchantById()" value="GET" type=button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div class="webservice">
+    PUT Merchant Address</br>
+    URL = /bropocalypse/v1/merchant/{id}/address.json
+    <form id="putMerchantAddress">
+        <table>
+            <tr>
+                <td>Merchant Id: <input class="merchantId" name="merchantId" value=""></td>
+            </tr>
+            <tr>
+                <td>Address: <input class="address" name='address' value='{"name":"Primary Address","address1":"1 Hollywood Ave","city":"Portland","provence":"OREGON","country":"US","zipCode":"97212"}'></td>
+            </tr>
+            <tr>
+                <td><input onclick='putMerchantAddress()' value='PUT' type=button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div class="webservice">
+    Delete merchants by IDs</br>
+    URL = DELETE /bropocalypse/v1/merchant/{ids}.json
+    <form id="deleteMerchantsByIds">
+        <table>
+            <tr>
+                <td>Merchant Ids: <input class="merchantIds" name='merchantIds' value=''></td>
+            </tr>
+            <tr>
+                <td><input onclick='deleteMerchantsByIds()' value='DELETE' type=button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<!--<div class="webservice">-->
+    <!--Get notes by ID</br>-->
+    <!--URL = GET /das/seasons/{seasonId}/notes/{noteIds}.json-->
+    <!--<form id="getNotesByIds">-->
+        <!--<table>-->
+            <!--<tr>-->
+                <!--<td>Season: <input class="seasonId" name='seasonId' value=''></td>-->
+                <!--<td>Note Ids: <input class="noteIds" name='noteIds' value=''></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td><input onclick='getNotesByIds()' value='GET' type=button></td>-->
+            <!--</tr>-->
+        <!--</table>-->
+    <!--</form>-->
+<!--</div>-->
+
+
+<!--&lt;!&ndash; GET NOTES BY RETAILER AND SEASON &ndash;&gt;-->
+<!--<div class="webservice">-->
+    <!--<a name="get-notes-by-retailer-and-season"></a>-->
+    <!--<b>iPad</b>: Get notes by Retailer and Season</br>-->
+    <!--API: <a href="/das/docs/RestApi.html#/retailers/{retailerDatabaseId}/seasons/{seasonId}/notes_GET">REST</a></br>-->
+    <!--URL = GET /retailers/{retailerDatabaseId}/seasons/{seasonId}/notes-->
+    <!--<form id="getNotesByRetailerAndSeason">-->
+        <!--<table>-->
+            <!--<tr>-->
+                <!--<td>retailerDatbaseId: <input class="retailerDatabaseId" name='retailerDatabaseId' value='7480422'></td>-->
+                <!--<td>season: <input class="seasonId" name='seasonId' value='HO2013'></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td><input onclick='getNotesByRetailerAndSeason()' value='GET' type=button></td>-->
+            <!--</tr>-->
+        <!--</table>-->
+    <!--</form>-->
+<!--</div>-->
+
+<!--&lt;!&ndash; SAVE NOTES &ndash;&gt;-->
+<!--<a name="save-notes"></a>-->
+<!--<div class="webservice">-->
+    <!--<b>iPad</b>: Save Notes.</br>-->
+    <!--API: <a href="/das/docs/RestApi.html#/retailers/{retailerDatabaseId}/seasons/{seasonId}/notes_POST">REST</a></br>-->
+    <!--URL = POST /retailers/{retailerDatabaseId}/seasons/{seasonId}/notes</br>-->
+    <!--Body = Notes Array</br>-->
+    <!--<form id="saveNotes">-->
+        <!--<table>-->
+            <!--<tr>-->
+                <!--<td><input onclick='saveNotes()' type=button value='POST'></td>-->
+                <!--<td>retailerDatbaseId: <input class="retailerDatabaseId" name='retailerDatabaseId' value='7480422'></td>-->
+                <!--<td>season: <input class="seasonId" name='seasonId' value='HO2013'></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td colspan="3"><textarea id="notesJSON" cols="120" rows="5">-->
+                    <!--[-->
+                    <!--{-->
+                    <!--"resourceType": "STYLE",-->
+                    <!--"season": "HO2013",-->
+                    <!--"resourceId": "8A3198",-->
+                    <!--"createDate": "2013-05-31 16:4:20",-->
+                    <!--"body": "test",-->
+                    <!--"retailerDatabaseId": 7480422,-->
+                    <!--"userDisplayName": "Abigail Date",-->
+                    <!--"retailerUserDatabaseId": 389698,-->
+                    <!--"color": null-->
+                    <!--}-->
+                    <!--]</textarea></td>-->
+            <!--</tr>-->
+        <!--</table>-->
+    <!--</form>-->
+<!--</div>-->
+
+
+
+
+<h3>Results:</h3>
+<div id='url'></div>
+<table>
+    RequestBody
+    <tr>
+        <td><textarea id="requestBody" cols="120" rows="5"></textarea></td>
+    </tr>
+</table>
+<pre id='results'></pre>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>
