@@ -66,6 +66,7 @@ public class MerchantController
   }
 
   @RequestMapping(value = GET_MERCHANT_BY_ID_CURRENT, method = GET)
+  @ResponseBody
   public Merchant[] getMerchantById(@PathVariable(ID_PATH_VARIABLE) String merchantId)
   {
     if(StringUtils.isEmpty(merchantId))

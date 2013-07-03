@@ -12,6 +12,6 @@
 
   <import resource="applicationContext-MongoDB.xml" />
 
-  <util:properties id="dasProperties" location="classpath:general.properties"/>
+  <util:properties id="commerceProperties" location="classpath:general.properties"/>
 
 </beans>

@@ -53,9 +53,9 @@
   <!--
     - Loads the root application context of this web app at startup.
   -->
-  <!--<listener>-->
-    <!--<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>-->
-  <!--</listener>-->
+  <listener>
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
 
   <!--
     - Publishes events for session creation and destruction through the application
