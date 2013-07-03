@@ -27,7 +27,6 @@ repositories {
 }
 
 ext {
-//  springVersion = '3.2.1.RELEASE'
   springVersion = '3.2.2.RELEASE'
   tomcatVersion = '7.0.11'
 }
@@ -56,8 +55,6 @@ dependencies {
             files('gradle/libs/ojdbc6.jar'),
             "org.springframework:spring-webmvc:$springVersion",
             "org.springframework.data:spring-data-mongodb:1.2.1.RELEASE"
-//        "org.springframework:spring-context:3.2.1" ,
-//        "org.springframework:spring-web:3.2.1"
         
         
 
