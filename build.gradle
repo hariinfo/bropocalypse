@@ -33,6 +33,12 @@ ext {
   tomcatVersion = '7.0.11'
 }
 
+
+configurations {
+  restApi {extendsFrom compile, providedCompile}
+
+}
+
 dependencies {
     providedCompile 'javax.servlet:servlet-api:2.5@jar'
     tomcat "org.apache.tomcat.embed:tomcat-embed-core:$tomcatVersion",
@@ -63,7 +69,16 @@ dependencies {
 
     testCompile 'org.testng:testng:6.3.1',
                 "org.springframework:spring-test:$springVersion"
+  
+    restApi files ('gradle/libs/versly-wsdoc-1.0-SNAPSHOT.jar'),
+            'org.freemarker:freemarker:2.3.16',
+            'joda-time:joda-time:1.6',
+            'com.beust:jcommander:1.4',
+            "org.codehaus.jackson:jackson-core-asl:1.6.3",
+            'javax.ws.rs:jsr311-api:1.1.1'
+  
 }
+
 
 test {
   useTestNG()
@@ -91,4 +106,75 @@ task testPerformance (type: Test) {
 // gradle wrapper version
 task wrapper(type: Wrapper, description: 'Runs the gradle wrapper.') {
     gradleVersion = '1.6'
+}
+
+// we need to copy the libraries nicely into somewhere we can 
+task copyRestApiLibs(type:Copy){
+    from configurations.restApi {
+      // we have multiple versions of asm, get rid of the old ones
+      exclude '**/*asm-3.3.1.jar','**/*asm-tree-3.0.jar'
+    }
+    into 'build/libs/restApi'
+  }
+
+
+war {
+     from ('build') {
+       include 'docs/**'
+     }  // adds docs file-set to the war.
+}
+
+
+task native2ascii << {
+    ant.delete() {
+        fileset(dir: "${processResources.destinationDir}") {
+            include(name: 'messages*.properties')
+        }
+    }
+    ant.native2ascii(src: 'src/main/resources/',
+            dest: "${processResources.destinationDir}",
+            includes: '**/messages*.properties',
+            encoding: 'UTF-8')
+}
+
+// we're doing this via a script because I cannot get javac working with either Ant or Gradle to implement the annotation processor.  A custom 
+// Gradle task would make that much easier...
+// using exec tasks so we can differentiate between Windows and unix, and stream the outputs
+task createRestApiSer ( dependsOn: classes)<< {
+  if(isWindows()){
+//    new ByteArrayOutputStream().withStream { output ->
+//          exec {
+//            executable = "createApiSer.cmd"
+//            standardOutput = output
+//          }
+//          println output.toString()
+//    }
+    // don't do anything for Windows until we figure out the DOS script.
+  }else {
+    new ByteArrayOutputStream().withStream { output ->
+      exec {
+        executable = "./createApiSer.sh"
+        standardOutput = output
+      }
+      println output.toString()
+    }
+  }
+}
+
+// make sure that the javadocs will be generated before war is run and ensure that we convert the resource bundles as appropriate
+war.dependsOn javadoc, native2ascii
+// Make javadoc depend on the Spring doclet stuff
+createRestApiSer.dependsOn copyRestApiLibs
+javadoc.dependsOn createRestApiSer
+
+
+public boolean isWindows()
+{
+  return System.properties['os.name'].toLowerCase().contains('windows')
+}
+
+// uses the system os.name property to determine the current host operating system
+public boolean isMac()
+{
+  return System.properties['os.name'].toLowerCase().contains('mac')
 }
