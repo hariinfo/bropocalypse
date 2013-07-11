@@ -39,4 +39,10 @@ public class SqlMerchantDao implements MerchantDao<Merchant>
   {
     return null;  //To change body of implemented methods use File | Settings | File Templates.
   }
+
+  @Override
+  public boolean merchantExists(String merchantId)
+  {
+    return false;  //To change body of implemented methods use File | Settings | File Templates.
+  }
 }

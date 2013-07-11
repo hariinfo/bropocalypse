@@ -1,7 +1,6 @@
 package com.statement.commerce.model.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.statement.commerce.dao.mongo.MongoUserDao;
 import com.statement.commerce.model.core.Address;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import static com.statement.commerce.dao.mongo.MongoUserDao.USER_COLLECTION;
@@ -17,7 +17,6 @@ import static com.statement.commerce.dao.mongo.MongoUserDao.USER_COLLECTION;
 @Document(collection = USER_COLLECTION)
 public class User implements Serializable
 {
-  private String merchantId;
   @Id
   private String id;
   @JsonIgnore
@@ -32,10 +31,11 @@ public class User implements Serializable
   private List<Role> roles = new ArrayList<>();
   private Address billingAddress;
   private Address shippingAddress;
+  private String merchantId;
+  private String email;
 
   public User()
   {
-
   }
 
   public User(Role... roles)
@@ -173,6 +173,16 @@ public class User implements Serializable
     this.shippingAddress = shippingAddress;
   }
 
+  public String getEmail()
+  {
+    return email;
+  }
+
+  public void setEmail(String email)
+  {
+    this.email = email;
+  }
+
   @Override
   public boolean equals(Object o)
   {
@@ -215,7 +225,10 @@ public class User implements Serializable
     {
       return false;
     }
-
+    if (email != null ? !email.equals(that.email) : that.email != null)
+    {
+      return false;
+    }
     return true;
   }
 
@@ -229,10 +242,12 @@ public class User implements Serializable
     result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
     result = 31 * result + (middleName != null ? middleName.hashCode() : 0);
     result = 31 * result + (merchantId != null ? merchantId.hashCode() : 0);
+    result = 31 * result + (email != null ? email.hashCode() : 0);
 
     return result;
   }
 
+  @Override
   public String toString()
   {
     return ReflectionToStringBuilder.toString(this);

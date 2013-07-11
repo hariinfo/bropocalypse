@@ -2,6 +2,7 @@ package com.statement.commerce.dao.mongo;
 
 import com.statement.commerce.context.AppContext;
 import com.statement.commerce.context.LocalProfile;
+import com.statement.commerce.dao.mongo.factory.UserFactory;
 import com.statement.commerce.model.user.User;
 import com.statement.commerce.model.user.Role;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
@@ -25,7 +27,7 @@ public class MongoUserDaoIntTest extends AbstractTestNGSpringContextTests
   @Autowired
   private MongoUserDao mongoUserDao;
 
-  @AfterTest(groups = "int")
+  @AfterMethod(groups = "int")
   public void testCleanup()
   {
     List<String> ids = new ArrayList<>();
@@ -41,15 +43,7 @@ public class MongoUserDaoIntTest extends AbstractTestNGSpringContextTests
   @Test(groups = "int")
   public void testSave()
   {
-    User user = new User();
-    user.setFirstName("Irene");
-    user.setMiddleName("N");
-    user.setLastName("Icabod");
-    user.setLocale(Locale.US);
-    user.setTimeZone(TimeZone.getTimeZone("US"));
-    user.setLoginName("irene.icabod@yahoo.com");
-    user.setMerchantId("1");
-    user.setRoles(Arrays.asList(Role.RETAIL_USER));
+    User user = UserFactory.getNewRetailUser("1");
     deleteList.add(user);
     mongoUserDao.save(user);
 
@@ -59,20 +53,33 @@ public class MongoUserDaoIntTest extends AbstractTestNGSpringContextTests
   @Test(groups = "int")
   public void testGetById()
   {
-    User user = new User();
-    user.setFirstName("Irene");
-    user.setMiddleName("N");
-    user.setLastName("Icabod");
-    user.setLocale(Locale.US);
-    user.setTimeZone(TimeZone.getTimeZone("US"));
-    user.setLoginName("irene.icabod@yahoo.com");
-    user.setMerchantId("1");
-    user.setRoles(Arrays.asList(Role.RETAIL_USER));
+    User user = UserFactory.getNewRetailUser("1");
     deleteList.add(user);
     mongoUserDao.save(user);
 
     User retrievedUser = mongoUserDao.getByIds(user.getId()).get(0);
     Assert.assertNotNull(retrievedUser, "The user should not be null");
     Assert.assertEquals(retrievedUser, user, "The users are not the same!");
+  }
+
+  @Test(groups = "int")
+  public void testGetByName()
+  {
+    User user = UserFactory.getNewRetailUser("1");
+    deleteList.add(user);
+    mongoUserDao.save(user);
+
+    List<User> users = mongoUserDao.findByName(user.getFirstName());
+
+    Assert.assertNotNull(users, "The user list should not be null");
+    Assert.assertFalse(users.isEmpty(), "The user list should not be empty");
+    Assert.assertEquals(users.size(), 1, "There should be exactly 1 match");
+    Assert.assertEquals(users.get(0), user, "The users should match");
+
+    users = mongoUserDao.findByName(user.getFirstName().toUpperCase());
+    Assert.assertNotNull(users, "The user list should not be null");
+    Assert.assertFalse(users.isEmpty(), "The user list should not be empty");
+    Assert.assertEquals(users.size(), 1, "There should be exactly 1 match");
+    Assert.assertEquals(users.get(0), user, "The users should match");
   }
 }

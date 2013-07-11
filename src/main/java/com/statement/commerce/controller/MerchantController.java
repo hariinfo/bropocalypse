@@ -70,7 +70,7 @@ public class MerchantController
 
   @RequestMapping(value = MERCHANT_BY_ID_CURRENT, method = GET)
   @ResponseBody
-  public Merchant[] getMerchantById(@PathVariable(ID_PATH_VARIABLE) String merchantId)
+  public Merchant getMerchantById(@PathVariable(ID_PATH_VARIABLE) String merchantId)
   {
     if(StringUtils.isEmpty(merchantId))
     {
@@ -78,7 +78,14 @@ public class MerchantController
     }
 
     List<Merchant> merchants = merchantService.getByIds(merchantId);
-    return merchants.toArray(new Merchant[merchants.size()]);
+
+    Merchant result = null;
+    if(!merchants.isEmpty())
+    {
+      result = merchants.get(0);
+    }
+
+    return result;
   }
 
   @RequestMapping(value  = MERCHANT_BY_ID_CURRENT, method = DELETE)

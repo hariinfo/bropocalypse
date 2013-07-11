@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.index.Index;
 import org.springframework.stereotype.Repository;
 
 import static com.statement.commerce.dao.mongo.MongoDaoConstants.DBOBJECT_ID;
+import static com.statement.commerce.dao.mongo.MongoDaoConstants.IGNORE_CASE_MARKER;
 import static com.statement.commerce.dao.mongo.MongoDaoConstants.REGEX_BOUNDARY;
 import static org.springframework.data.mongodb.core.query.Order.ASCENDING;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -26,6 +27,7 @@ public class MongoMerchantDao extends MongoDao implements MerchantDao<Merchant>
   private static final String NAME_FIELD = "name";
   private static final String ADDRESS_FIELD = "billingAddress";
 
+  @Override
   public void updateAddress(String id, Address address)
   {
     WriteResult result = mongoTemplate.updateFirst(new Query(where(DBOBJECT_ID).is(id)), update(ADDRESS_FIELD, address), Merchant.class);
@@ -55,7 +57,7 @@ public class MongoMerchantDao extends MongoDao implements MerchantDao<Merchant>
       throw new IllegalArgumentException("No ids where provided in the delete call");
     }
 
-    mongoTemplate.remove(new Query(where(DBOBJECT_ID).in(ids)),  Merchant.class);
+    mongoTemplate.remove(new Query(where(DBOBJECT_ID).in((Object[]) ids)),  Merchant.class);
   }
 
   @Override
@@ -72,9 +74,17 @@ public class MongoMerchantDao extends MongoDao implements MerchantDao<Merchant>
   }
 
   @Override
+  public boolean merchantExists(String merchantId)
+  {
+    Query query = new Query(where(DBOBJECT_ID).is(merchantId));
+    long count = mongoTemplate.count(query, Merchant.class);
+    return count > 0;
+  }
+
+  @Override
   public List<Merchant> findByName(String name)
   {
-    Query query = new Query(where(NAME_FIELD).regex(REGEX_BOUNDARY + name + REGEX_BOUNDARY));
+    Query query = new Query(where(NAME_FIELD).regex(REGEX_BOUNDARY + name + REGEX_BOUNDARY,IGNORE_CASE_MARKER));
     return getMerchantsInternal(query);
   }
 

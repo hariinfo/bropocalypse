@@ -10,6 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 
@@ -25,17 +26,20 @@ public class MongoMerchantDaoIntTest extends AbstractTestNGSpringContextTests
   private MongoMerchantDao merchantDao;
   private List<Merchant> deleteList = new ArrayList<>();
 
-  @AfterTest(groups = "int")
+  @AfterMethod(groups = "int")
   public void testCleanup()
   {
-    List<String> ids = new ArrayList<>();
-    for(Merchant merchant : deleteList)
+    if(!deleteList.isEmpty())
     {
-      ids.add(merchant.getId());
-    }
+      List<String> ids = new ArrayList<>();
+      for(Merchant merchant : deleteList)
+      {
+        ids.add(merchant.getId());
+      }
 
-    merchantDao.delete(ids.toArray(new String[ids.size()]));
-    ids.clear();
+      merchantDao.delete(ids.toArray(new String[ids.size()]));
+      deleteList.clear();
+    }
   }
 
   @Test(groups = "int")
@@ -78,6 +82,17 @@ public class MongoMerchantDaoIntTest extends AbstractTestNGSpringContextTests
 
     Assert.assertNotNull(retrievedMerchant, "We should have found a merchant with id [" + merchant.getId() + "]");
     Assert.assertEquals(retrievedMerchant, merchant, "The merchants should have been the same!");
+  }
+
+  @Test(groups = "int")
+  public void testDoesMerchantExist()
+  {
+    Merchant merchant = MerchantFactory.getNewMerchant();
+    merchant.setId(null);
+    deleteList.add(merchant);
+    merchantDao.save(merchant);
+
+    Assert.assertTrue(merchantDao.merchantExists(merchant.getId()));
   }
 
   @Test(groups = "int")
