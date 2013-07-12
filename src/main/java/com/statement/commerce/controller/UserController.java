@@ -1,8 +1,11 @@
 package com.statement.commerce.controller;
 
+import com.statement.commerce.model.core.Address;
+import com.statement.commerce.model.user.Role;
 import com.statement.commerce.model.user.User;
 import com.statement.commerce.service.UserService;
 import java.util.List;
+import java.util.TimeZone;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,6 +38,11 @@ public class UserController
   private static final String USER = CURRENT_VERSION + "user";
   private static final String ACTIVE_USER = USER + "/active";
   private static final String USER_BY_ID = USER + "/{id}";
+  private static final String USER_TIMEZONE = USER_BY_ID + "/timezone";
+  private static final String USER_SHIPPING_ADDRESS = USER_BY_ID + "/shippingaddress";
+  private static final String USER_BILLING_ADDRESS = USER_BY_ID + "/billingaddress";
+  private static final String USER_CATALOGS = USER_BY_ID + "/catalogs";
+  private static final String USER_ROLES = USER_BY_ID + "/roles";
 
   @Autowired
   private UserService userService;
@@ -107,9 +115,74 @@ i.	/v1/user/{id}
   {
     if(StringUtils.isEmpty(userId))
     {
-      throw new IllegalArgumentException("No merchant ids provided");
+      throw new IllegalArgumentException("No user id provided");
     }
 
     userService.delete(userId);
+  }
+
+  @RequestMapping(value = USER_TIMEZONE, method = PUT)
+  @ResponseBody
+  public void updateUserTimezone(@PathVariable(ID_PATH_VARIABLE) String userId, @RequestBody String timeZone)
+  {
+    if(StringUtils.isEmpty(userId))
+    {
+      throw new IllegalArgumentException("No user id provided");
+    }
+
+    if(StringUtils.isEmpty(timeZone))
+    {
+      throw new IllegalArgumentException("The timezone PUT data cannot be null");
+    }
+
+    userService.updateTimezone(userId, timeZone);
+  }
+
+  @RequestMapping(value = USER_SHIPPING_ADDRESS, method = PUT)
+  @ResponseBody
+  public void updateShippingAddress(@PathVariable(ID_PATH_VARIABLE)  String userId, @RequestBody Address address)
+  {
+    if(StringUtils.isEmpty(userId))
+    {
+      throw new IllegalArgumentException("No user id provided");
+    }
+
+    userService.updateShippingAddress(userId, address);
+  }
+
+  @RequestMapping(value = USER_BILLING_ADDRESS, method = PUT)
+  @ResponseBody
+  public void updateBillingAddress(@PathVariable(ID_PATH_VARIABLE) String userId, @RequestBody Address address)
+  {
+    if(StringUtils.isEmpty(userId))
+    {
+      throw new IllegalArgumentException("No user id provided");
+    }
+
+    userService.updateBillingAddress(userId, address);
+  }
+
+  @RequestMapping(value = USER_ROLES, method = PUT)
+  @ResponseBody
+  public void updateRoles(@PathVariable(ID_PATH_VARIABLE) String userId, @RequestBody List<Role> roles)
+  {
+    if(StringUtils.isEmpty(userId))
+    {
+      throw new IllegalArgumentException("No user id provided");
+    }
+
+    userService.updateRoles(userId, roles);
+  }
+
+  @RequestMapping(value = USER_CATALOGS, method = PUT)
+  @ResponseBody
+  public void updateCatalogIds(@PathVariable(ID_PATH_VARIABLE) String userId, @RequestBody List<String> catalogIds)
+  {
+    if(StringUtils.isEmpty(userId))
+    {
+      throw new IllegalArgumentException("No user id provided");
+    }
+
+    userService.updateCatalogIds(userId, catalogIds);
   }
 }

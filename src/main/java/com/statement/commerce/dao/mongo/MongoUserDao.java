@@ -110,7 +110,7 @@ public class MongoUserDao extends MongoDao implements UserDao<User>
   }
 
   @Override
-  public void updateTimeZone(String userId, TimeZone timeZone)
+  public void updateTimeZone(String userId, String timeZone)
   {
     WriteResult result = mongoTemplate.updateFirst(new Query(where(DBOBJECT_ID).is(userId)), Update.update(TIME_ZONE_FIELD, timeZone), User.class);
 
@@ -134,7 +134,7 @@ public class MongoUserDao extends MongoDao implements UserDao<User>
   @Override
   public void updateRoles(String userId, List<Role> roles)
   {
-    WriteResult result = mongoTemplate.updateFirst(new Query(where(DBOBJECT_ID).is(userId)), Update.update(CATALOG_IDS_FIELD, roles), User.class);
+    WriteResult result = mongoTemplate.updateFirst(new Query(where(DBOBJECT_ID).is(userId)), Update.update(ROLES_FIELD, roles), User.class);
 
     if (result.getN() < 1)
     {

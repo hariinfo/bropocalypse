@@ -2,7 +2,10 @@ package com.statement.commerce.service;
 
 import com.statement.commerce.dao.GenericDao;
 import com.statement.commerce.dao.MerchantDao;
+import com.statement.commerce.dao.UserDao;
+import com.statement.commerce.model.core.Address;
 import com.statement.commerce.model.core.ObjectForIdNotFoundException;
+import com.statement.commerce.model.user.Role;
 import com.statement.commerce.model.user.User;
 import java.util.List;
 import java.util.TimeZone;
@@ -26,7 +29,7 @@ public class UserService
   private static final Log LOG = LogFactory.getLog(UserService.class);
   @Autowired
   @Qualifier("MongoUserDao")
-  private GenericDao userDao;
+  private UserDao userDao;
   @Autowired
   @Qualifier("MongoMerchantDao")
   private MerchantDao merchantDao;
@@ -70,5 +73,30 @@ public class UserService
     }
 
     userDao.save(user);
+  }
+
+  public void updateTimezone(String userId, String timeZone)
+  {
+    userDao.updateTimeZone(userId, timeZone);
+  }
+
+  public void updateShippingAddress(String userId, Address address)
+  {
+    userDao.updateShippingAddress(userId, address);
+  }
+
+  public void updateBillingAddress(String userId, Address address)
+  {
+    userDao.updateBillingAddress(userId, address);
+  }
+
+  public void updateCatalogIds(String userId, List<String> catalogIds)
+  {
+    userDao.updateCatalogs(userId, catalogIds);
+  }
+
+  public void updateRoles(String userId, List<Role> roles)
+  {
+    userDao.updateRoles(userId, roles);
   }
 }

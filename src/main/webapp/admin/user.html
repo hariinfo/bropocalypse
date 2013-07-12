@@ -34,7 +34,34 @@
             var url = "/bropocalypse/v1/user/" + userId + ".json";
             del(url);
         };
-
+        var putTimeZone = function () {
+            var form = $("#putTimeZone");
+            var timezoneJson = $(".timezoneJson", form).val();
+            var userId = $(".userId", form).val();
+            var url = "/bropocalypse/v1/user/" +userId+ "/timezone.json";
+            put (url, timezoneJson);
+        }
+        var putShippingAddress = function () {
+            var form = $("#putShippingAddress");
+            var shippingAddressJson = $(".shippingAddressJson", form).val();
+            var userId = $(".userId", form).val();
+            var url = "/bropocalypse/v1/user/" +userId+ "/shippingaddress.json";
+            put (url, shippingAddressJson);
+        }
+        var putBillingAddress = function () {
+            var form = $("#putBillingAddress");
+            var billingAddressJson = $(".billingAddressJson", form).val();
+            var userId = $(".userId", form).val();
+            var url = "/bropocalypse/v1/user/" +userId+ "/billingaddress.json";
+            put (url, billingAddressJson);
+        }
+        var putRoles = function () {
+            var form = $("#putRoles");
+            var rolesJson = $(".rolesJson", form).val();
+            var userId = $(".userId", form).val();
+            var url = "/bropocalypse/v1/user/" +userId+ "/roles.json";
+            put (url, rolesJson);
+        }
     </script>
 </head>
 <body>
@@ -76,7 +103,7 @@
 "shippingAddress": {"name": "Primary Address","address1": "12 Hollywood Ave","city": "Portland","provence": "OREGON","country": "US","zipCode": "97212"},
 "roles" : [ "RETAIL_USER" ],
 "locale" : "en_US",
-"timeZoneId" : "PST"
+"timeZone" : "PST"
 }
                 </textarea></td>
             </tr>
@@ -86,8 +113,7 @@
         </table>
     </form>
 </div>
-
-
+<br><br>
 <div class="webservice">
     Get user by id</br>
     URL = /bropocalypse/v1/user/{id}.json
@@ -102,9 +128,9 @@
         </table>
     </form>
 </div>
-
+<br><br>
 <div class="webservice">
-    PUT user Address</br>
+    PUT user</br>
     URL = /bropocalypse/v1/user/{id}.json
     <form id="putUser">
         <table>
@@ -114,7 +140,6 @@
             <tr>
                 <td>User JSON:
                     <textarea id="userJsonUpdate" class="userJsonUpdate" name="userJsonUpdate" cols="140" rows="15">
-
                     </textarea>
                 </td>
             </tr>
@@ -124,7 +149,7 @@
         </table>
     </form>
 </div>
-
+<br><br>
 <div class="webservice">
     Delete users by IDs</br>
     URL = DELETE /bropocalypse/v1/user/{id}.json
@@ -135,6 +160,90 @@
             </tr>
             <tr>
                 <td><input onclick='deleteUserById()' value='DELETE' type=button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<br><br>
+<div class="webservice">
+    PUT user TimeZone</br>
+    URL = /bropocalypse/v1/user/{id}/timezone.json
+    <form id="putTimeZone">
+        <table>
+            <tr>
+                <td>user Id: <input class="userId" name="userId" value=""></td>
+            </tr>
+            <tr>
+                <td>Timezone:
+                    <textarea id="timezoneJson" class="timezoneJson" name="timezoneJson" cols="50" rows="5">CST</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td><input onclick='putTimeZone()' value='PUT' type=button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<br><br>
+<div class="webservice">
+    PUT user shipping address</br>
+    URL = /bropocalypse/v1/user/{id}/shippingaddress.json
+    <form id="putShippingAddress">
+        <table>
+            <tr>
+                <td>user Id: <input class="userId" name="userId" value=""></td>
+            </tr>
+            <tr>
+                <td>Shipping Address JSON:
+                    <textarea id="shippingAddressJson" class="shippingAddressJson" name="shippingAddressJson" cols="50" rows="5">
+{"name":"Primary Address","address1":"1 Hollywood Ave","city":"Portland","provence":"OREGON","country":"US","zipCode":"97212"}
+                    </textarea>
+                </td>
+            </tr>
+            <tr>
+                <td><input onclick='putShippingAddress()' value='PUT' type=button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<br><br>
+<div class="webservice">
+    PUT user billing address</br>
+    URL = /bropocalypse/v1/user/{id}/billingaddress.json
+    <form id="putBillingAddress">
+        <table>
+            <tr>
+                <td>user Id: <input class="userId" name="userId" value=""></td>
+            </tr>
+            <tr>
+                <td>Billing Address JSON:
+                    <textarea id="billingAddressJson" class="billingAddressJson" name="billingAddressJson" cols="50" rows="5">
+{"name":"Primary Address","address1":"1 Hollywood Ave","city":"Portland","provence":"OREGON","country":"US","zipCode":"97212"}
+                    </textarea>
+                </td>
+            </tr>
+            <tr>
+                <td><input onclick='putBillingAddress()' value='PUT' type=button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<br><br>
+<div class="webservice">
+    PUT user Roles</br>
+    URL = /bropocalypse/v1/user/{id}/roles.json
+    <form id="putRoles">
+        <table>
+            <tr>
+                <td>user Id: <input class="userId" name="userId" value=""></td>
+            </tr>
+            <tr>
+                <td>Roles JSON:
+                    <textarea id="rolesJson" class="rolesJson" name="rolesJson" cols="50" rows="5">["MERCHANT_ADMIN","MERCHANT_CATALOG_ADMIN"]</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td><input onclick='putRoles()' value='PUT' type=button></td>
             </tr>
         </table>
     </form>

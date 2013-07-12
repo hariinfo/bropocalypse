@@ -8,9 +8,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ReflectionToStringBuilder;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 import static com.statement.commerce.dao.mongo.MongoUserDao.USER_COLLECTION;
 
@@ -26,8 +27,8 @@ public class User implements Serializable
   private String lastName;
   private String middleName;
   private Locale locale;
-  private TimeZone timeZone;
-  private List<String> catalogIds;
+  private String timeZone;
+  private List<String> catalogIds = new ArrayList<>();
   private List<Role> roles = new ArrayList<>();
   private Address billingAddress;
   private Address shippingAddress;
@@ -113,14 +114,25 @@ public class User implements Serializable
     this.locale = locale;
   }
 
-  public TimeZone getTimeZone()
+  public String getTimeZone()
   {
     return timeZone;
   }
 
-  public void setTimeZone(TimeZone timeZone)
+  public void setTimeZone(String timeZone)
   {
     this.timeZone = timeZone;
+  }
+
+  @JsonIgnore
+  public TimeZone getTimeZoneObject()
+  {
+    if(StringUtils.isNotEmpty(timeZone))
+    {
+      return TimeZone.getTimeZone(timeZone);
+    }
+
+    return null;
   }
 
   public List<Role> getRoles()
