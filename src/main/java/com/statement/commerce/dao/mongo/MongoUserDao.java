@@ -99,7 +99,7 @@ public class MongoUserDao extends MongoDao implements UserDao<User>
   }
 
   @Override
-  public void updateLocale(String userId, Locale locale)
+  public void updateLocale(String userId, String locale)
   {
     WriteResult result = mongoTemplate.updateFirst(new Query(where(DBOBJECT_ID).is(userId)), Update.update(LOCALE_FIELD, locale), User.class);
 

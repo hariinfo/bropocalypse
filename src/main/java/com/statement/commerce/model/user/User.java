@@ -26,7 +26,7 @@ public class User implements Serializable
   private String firstName;
   private String lastName;
   private String middleName;
-  private Locale locale;
+  private String locale;
   private String timeZone;
   private List<String> catalogIds = new ArrayList<>();
   private List<Role> roles = new ArrayList<>();
@@ -34,6 +34,7 @@ public class User implements Serializable
   private Address shippingAddress;
   private String merchantId;
   private String email;
+  private String UNDERSCORE = "_";
 
   public User()
   {
@@ -104,14 +105,50 @@ public class User implements Serializable
     this.middleName = middleName;
   }
 
-  public Locale getLocale()
+  public String getLocale()
   {
     return locale;
   }
 
-  public void setLocale(Locale locale)
+  public void setLocale(String locale)
   {
     this.locale = locale;
+  }
+
+  @JsonIgnore
+  public Locale getLocaleObject()
+  {
+    Locale retrievedLocale;
+
+    if(StringUtils.isNotEmpty(locale))
+    {
+      String[] localeParts = locale.split(UNDERSCORE);
+      int numParts = localeParts.length;
+
+      switch (numParts)
+      {
+        case 1:
+          retrievedLocale = new Locale(localeParts[0]);
+          break;
+
+        case 2:
+          retrievedLocale = new Locale(localeParts[0], localeParts[1]);
+          break;
+
+        case 3:
+          retrievedLocale = new Locale(localeParts[0], localeParts[1], localeParts[2]);
+          break;
+
+        default:
+          retrievedLocale = null;
+      }
+    }
+    else
+    {
+      retrievedLocale = null;
+    }
+
+    return retrievedLocale;
   }
 
   public String getTimeZone()

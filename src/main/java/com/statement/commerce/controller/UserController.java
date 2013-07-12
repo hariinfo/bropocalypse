@@ -43,6 +43,7 @@ public class UserController
   private static final String USER_BILLING_ADDRESS = USER_BY_ID + "/billingaddress";
   private static final String USER_CATALOGS = USER_BY_ID + "/catalogs";
   private static final String USER_ROLES = USER_BY_ID + "/roles";
+  private static final String USER_LOCALE = USER_BY_ID + "/locale";
 
   @Autowired
   private UserService userService;
@@ -184,5 +185,22 @@ i.	/v1/user/{id}
     }
 
     userService.updateCatalogIds(userId, catalogIds);
+  }
+
+  @RequestMapping(value = USER_LOCALE, method = PUT)
+  @ResponseBody
+  public void updateLocale(@PathVariable(ID_PATH_VARIABLE) String userId, @RequestBody String locale)
+  {
+    if(StringUtils.isEmpty(userId))
+    {
+      throw new IllegalArgumentException("No user id provided");
+    }
+
+    if(StringUtils.isEmpty(locale))
+    {
+      throw new IllegalArgumentException("No locale was provided");
+    }
+
+    userService.updateLocale(userId, locale);
   }
 }

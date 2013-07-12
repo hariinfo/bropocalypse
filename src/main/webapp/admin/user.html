@@ -62,29 +62,19 @@
             var url = "/bropocalypse/v1/user/" +userId+ "/roles.json";
             put (url, rolesJson);
         }
+        var putLocale = function () {
+            var form = $("#putLocale");
+            var localeJson = $(".localeJson", form).val();
+            var userId = $(".userId", form).val();
+            var url = "/bropocalypse/v1/user/" +userId+ "/locale.json";
+            put (url, localeJson);
+        }
+
     </script>
 </head>
 <body>
 <h3><a href="webservices.html">Web Services</a> </h3>
 
-<!--
-  @Id
-  private String id;
-  @JsonIgnore
-  private String sourceSystemId;
-  private String loginName;
-  private String firstName;
-  private String lastName;
-  private String middleName;
-  private Locale locale;
-  private TimeZone timeZone;
-  private List<String> catalogIds;
-  private List<Role> roles = new ArrayList<>();
-  private Address billingAddress;
-  private Address shippingAddress;
-  private String merchantId;
-  private String email;
--->
 <div class="webservice">
     Create new User</br>
     URL = /bropocalypse/v1/user.json
@@ -249,6 +239,26 @@
     </form>
 </div>
 
+<br><br>
+<div class="webservice">
+    PUT user Roles</br>
+    URL = /bropocalypse/v1/user/{id}/locale.json
+    <form id="putLocale">
+        <table>
+            <tr>
+                <td>user Id: <input class="userId" name="userId" value=""></td>
+            </tr>
+            <tr>
+                <td>Roles JSON:
+                    <textarea id="localeJson" class="localeJson" name="localeJson" cols="20" rows="3">en_CA</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td><input onclick='putLocale()' value='PUT' type=button></td>
+            </tr>
+        </table>
+    </form>
+</div>
 
 <h3>Results:</h3>
 <div id='url'></div>

@@ -141,8 +141,8 @@ public class MongoUserDaoIntTest extends AbstractTestNGSpringContextTests
     deleteList.add(user);
     mongoUserDao.save(user);
 
-    Locale locale = Locale.UK;
-    assertNotEquals(user.getLocale(), locale, "The locales should not match. If they do, check the UserFactory");
+    String locale = "en_GB";
+    assertNotEquals(user.getLocaleObject(), locale, "The locales should not match. If they do, check the UserFactory");
     mongoUserDao.updateLocale(user.getId(), locale);
 
     User updatedUser = mongoUserDao.getByIds(user.getId()).get(0);

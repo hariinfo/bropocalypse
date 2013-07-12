@@ -99,4 +99,9 @@ public class UserService
   {
     userDao.updateRoles(userId, roles);
   }
+
+  public void updateLocale(String userId, String locale)
+  {
+    userDao.updateLocale(userId, locale);
+  }
 }

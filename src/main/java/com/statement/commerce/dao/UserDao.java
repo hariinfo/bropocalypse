@@ -11,7 +11,7 @@ public interface UserDao<T> extends GenericDao<T>
 {
   void updateBillingAddress(String userId, Address address);
   void updateShippingAddress(String userId, Address address);
-  void updateLocale(String userId, Locale locale);
+  void updateLocale(String userId, String locale);
   void updateTimeZone(String userId, String timeZone);
   void updateCatalogs(String userId, List<String> catalogIds);
   void updateRoles(String userId, List<Role> roles);

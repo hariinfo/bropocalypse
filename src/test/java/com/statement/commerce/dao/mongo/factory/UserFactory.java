@@ -30,7 +30,7 @@ public class UserFactory
     User user = new User();
     user.setFirstName("Flava");
     user.setLastName("Flave");
-    user.setLocale(Locale.US);
+    user.setLocale("en_US");
     user.setTimeZone("PST");
     String email = "flava.flave@gmail.com";
     user.setEmail(email);
@@ -50,7 +50,7 @@ public class UserFactory
     user.setFirstName("Irene");
     user.setMiddleName("N");
     user.setLastName("Icabod");
-    user.setLocale(Locale.US);
+    user.setLocale("en_US");
     user.setTimeZone("EST");
     String email = "irene.icabod@yahoo.com";
     user.setEmail(email);
