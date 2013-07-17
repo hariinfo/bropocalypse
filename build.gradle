@@ -66,7 +66,8 @@ dependencies {
             "org.springframework:spring-webmvc:$springVersion",
             "org.springframework.data:spring-data-mongodb:1.2.1.RELEASE",
             "ch.qos.logback:logback-core:$logbackVersion",
-            "ch.qos.logback:logback-classic:$logbackVersion"
+            "ch.qos.logback:logback-classic:$logbackVersion",
+            "org.elasticsearch:elasticsearch:0.90.2"
         
         
 
@@ -123,6 +124,11 @@ task copyRestApiLibs(type:Copy){
     into 'build/libs/restApi'
   }
 
+//task startElasticSearch (type:Exec) {
+//
+//  workingDir '/Applications/elasticsearch-0.90.2/bin'
+//  commandLine "./elasticsearch -f"
+//}
 
 war {
      from ('build') {
