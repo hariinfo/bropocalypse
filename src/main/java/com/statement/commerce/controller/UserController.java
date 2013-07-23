@@ -32,10 +32,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 public class UserController
 {
   private static final Log LOG = LogFactory.getLog(MerchantController.class);
-  private static final String PREVIOUS_VERSION = "v0/";
-  private static final String CURRENT_VERSION  = "v1/";
 
-  private static final String USER = CURRENT_VERSION + "user";
+
+  private static final String USER = ControllerConstants.CURRENT_VERSION + "user";
   private static final String ACTIVE_USER = USER + "/active";
   private static final String USER_BY_ID = USER + "/{id}";
   private static final String USER_TIMEZONE = USER_BY_ID + "/timezone";

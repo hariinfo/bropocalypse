@@ -10,4 +10,6 @@ package com.statement.commerce.controller;
 public interface ControllerConstants
 {
   String ID_PATH_VARIABLE = "id";
+  String PREVIOUS_VERSION = "v0/";
+  String CURRENT_VERSION  = "v1/";
 }

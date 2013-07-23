@@ -67,7 +67,8 @@ dependencies {
             "org.springframework.data:spring-data-mongodb:1.2.1.RELEASE",
             "ch.qos.logback:logback-core:$logbackVersion",
             "ch.qos.logback:logback-classic:$logbackVersion",
-            "org.elasticsearch:elasticsearch:0.90.2"
+            "org.elasticsearch:elasticsearch:0.90.2",
+            "io.searchbox:jest:0.0.4"
         
         
 

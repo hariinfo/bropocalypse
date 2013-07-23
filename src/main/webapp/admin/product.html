@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>User</title>
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="/bropocalypse/static/css/admin.css"/>
+    <script src="/bropocalypse/static/js/jquery-1.7.1.min.js"></script>
+    <script src="/bropocalypse/static/js/jquery.autosize.js"></script>
+    <script src="/bropocalypse/static/js/admin.js"></script>
+    <script type="text/javascript">
+
+        var getUserById = function () {
+            var form = $("#getUserById");
+            var userId = $(".userId", form).val();
+            var url = "/bropocalypse/v1/user/" +userId+ ".json";
+            get(url);
+        };
+
+
+    </script>
+</head>
+<body>
+<h3><a href="webservices.html">Web Services</a> </h3>
+
+<div class="webservice">
+    Get user by id</br>
+    URL = /bropocalypse/v1/product/sync.json
+    <form id="getUserById">
+        <table>
+            <tr>
+                <td>user Id: <input class="userId" name="userId" value=""></td>
+            </tr>
+            <tr>
+                <td><input onclick="getUserById()" value="GET" type=button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<br><br>
+
+
+<h3>Results:</h3>
+<div id='url'></div>
+<table>
+    RequestBody
+    <tr>
+        <td><textarea id="requestBody" cols="120" rows="5"></textarea></td>
+    </tr>
+</table>
+<pre id='results'></pre>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

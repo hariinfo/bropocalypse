@@ -25,13 +25,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 public class MerchantController
 {
   private static final Log LOG = LogFactory.getLog(MerchantController.class);
-  private static final String PREVIOUS_VERSION = "v0/";
-  private static final String CURRENT_VERSION  = "v1/";
-
-  private static final String MERCHANT_BY_NAME = CURRENT_VERSION + "merchant/name";
-  private static final String MERCHANT = CURRENT_VERSION + "merchant";
-  private static final String UPDATE_MERCHANT_ADDRESS = CURRENT_VERSION + "merchant/{id}/address";
-  private static final String MERCHANT_BY_ID_CURRENT = CURRENT_VERSION + "merchant/{id}";
+  private static final String MERCHANT_BY_NAME = ControllerConstants.CURRENT_VERSION + "merchant/name";
+  private static final String MERCHANT = ControllerConstants.CURRENT_VERSION + "merchant";
+  private static final String UPDATE_MERCHANT_ADDRESS = ControllerConstants.CURRENT_VERSION + "merchant/{id}/address";
+  private static final String MERCHANT_BY_ID_CURRENT = ControllerConstants.CURRENT_VERSION + "merchant/{id}";
 
   @Autowired
   private MerchantService merchantService;
