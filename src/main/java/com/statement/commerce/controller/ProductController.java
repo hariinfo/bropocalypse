@@ -78,7 +78,7 @@ public class ProductController
     {
 //      ProductController.class.getResource("apparelData.json").toURI();
 //      x = Files.readAllBytes(FileSystems.getDefault().getPath("apparelData.json"));
-      URL url = ProductController.class.getResource("/apparelData.json");
+      URL url = ProductController.class.getResource("/test/main/resources/apparelData.json");
       URI uri = url.toURI();
 
 //      x = Files.readAllBytes(Paths.get(uri));

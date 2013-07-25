@@ -1,5 +1,6 @@
 package com.statement.commerce.model.product;
 
+import io.searchbox.annotations.JestId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,9 +17,9 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
  */
 public class Product
 {
+  @JestId
   private String id;
   private ProductType productType = ProductType.PRODUCT;
-//  private ProductDetail detail = new ProductDetail();
   private String externalSystemId;
   private String productName;
   private Double retailPrice;
@@ -45,16 +46,6 @@ public class Product
   {
     this.productType = productType;
   }
-//
-//  public ProductDetail getDetail()
-//  {
-//    return detail;
-//  }
-//
-//  public void setDetail(ProductDetail detail)
-//  {
-//    this.detail = detail;
-//  }
 
   public void addCustomAtrribute(String key, Object value)
   {

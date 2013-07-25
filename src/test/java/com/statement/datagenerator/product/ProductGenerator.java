@@ -1,4 +1,4 @@
-package com.statement.datagenerator.products;
+package com.statement.datagenerator.product;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.statement.commerce.model.product.Product;
@@ -13,12 +13,13 @@ import java.util.UUID;
 import org.testng.annotations.Test;
 
 /**
- * Created with IntelliJ IDEA.
+ * Dummy class used to convert raw XML data into our product model and then into json
  * User: dedrick
  * Date: 7/13/13
  * Time: 5:52 PM
  * To change this template use File | Settings | File Templates.
  */
+@Deprecated
 public class ProductGenerator
 {
   private String[] apparelSizes = new String[]{"XS", "S", "M", "L", "XL", "XXL"};

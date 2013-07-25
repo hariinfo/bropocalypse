@@ -63,17 +63,17 @@
       <constructor-arg name="mongoDbFactory" ref="mongoReplicaDbFactory"/>
     </bean>
 
-    <!-- spring default assortment mongo application database support -->
-    <mongo:db-factory id="defaultAssortmentReplicaDbFactory" dbname="ecommerce" mongo-ref="ecommerceReplica"/>
-    <bean id="defaultAssortmentMongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-      <constructor-arg name="mongoDbFactory" ref="defaultAssortmentReplicaDbFactory"/>
-    </bean>
+    <!--&lt;!&ndash; spring default assortment mongo application database support &ndash;&gt;-->
+    <!--<mongo:db-factory id="defaultAssortmentReplicaDbFactory" dbname="ecommerce" mongo-ref="ecommerceReplica"/>-->
+    <!--<bean id="defaultAssortmentMongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">-->
+      <!--<constructor-arg name="mongoDbFactory" ref="defaultAssortmentReplicaDbFactory"/>-->
+    <!--</bean>-->
 
-    <!-- spring mongo queue database support -->
-    <mongo:db-factory id="mongoReplicaQueueDbFactory" dbname="ecommerceQueue" mongo-ref="ecommerceReplica"/>
-    <bean id="mongoQueueTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-      <constructor-arg name="mongoDbFactory" ref="mongoReplicaQueueDbFactory"/>
-    </bean>
+    <!--&lt;!&ndash; spring mongo queue database support &ndash;&gt;-->
+    <!--<mongo:db-factory id="mongoReplicaQueueDbFactory" dbname="ecommerceQueue" mongo-ref="ecommerceReplica"/>-->
+    <!--<bean id="mongoQueueTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">-->
+      <!--<constructor-arg name="mongoDbFactory" ref="mongoReplicaQueueDbFactory"/>-->
+    <!--</bean>-->
   </beans>
 
   <beans>

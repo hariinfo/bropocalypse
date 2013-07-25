@@ -33,6 +33,7 @@ public class User implements Serializable
   private Address billingAddress;
   private Address shippingAddress;
   private String merchantId;
+  private String merchantName;
   private String email;
   private String UNDERSCORE = "_";
 
@@ -230,6 +231,16 @@ public class User implements Serializable
   public void setEmail(String email)
   {
     this.email = email;
+  }
+
+  public String getMerchantName()
+  {
+    return merchantName;
+  }
+
+  public void setMerchantName(String merchantName)
+  {
+    this.merchantName = merchantName;
   }
 
   @Override

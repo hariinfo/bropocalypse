@@ -87,6 +87,22 @@ dependencies {
   
 }
 
+task loadDb (type: Test) {
+  useTestNG()
+  options {
+    includeGroups 'DataLoader'
+  }
+  testReportDir = new File(testReportDir, "LoadDb-report")
+}
+
+task dropDb (type: Test) {
+  useTestNG()
+  options {
+    includeGroups 'DropData'
+  }
+  testReportDir = new File(testReportDir, "DropDb-report")
+}
+
 
 test {
   useTestNG()

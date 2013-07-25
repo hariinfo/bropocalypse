@@ -11,5 +11,10 @@ public interface MerchantDao<T> extends GenericDao<T>
    */
   void updateAddress(String id, Address address);
 
+  /**
+   * Does a merchant with the provided <code>merchantId</code> exist
+   * @param merchantId the id of the merchant in question
+   * @return true if the merchant exist; false otherwise
+   */
   boolean merchantExists(String merchantId);
 }

@@ -202,6 +202,11 @@ public class MongoDao
     }
   }
 
+  protected MongoTemplate getMongoTemplate()
+  {
+    return mongoTemplate;
+  }
+
   /**
    * Sanity determination for appropriate WriteConcern level across all write related database requests. Inspects the database replicaSet status to
    * decide whether to use SAFE for single databases, or REPLICAS_SAFE for replicating databases. Defaults to SAFE if no other determination can be
