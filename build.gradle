@@ -207,3 +207,15 @@ public boolean isMac()
 {
   return System.properties['os.name'].toLowerCase().contains('mac')
 }
+
+idea {
+  project {
+    jdkName='1.7'
+    languageLevel='1.7'
+  }
+  module {
+    downloadSources=true
+    // add or exclude source dirs here
+    // excludeDirs = file("src/........")
+  }
+}
