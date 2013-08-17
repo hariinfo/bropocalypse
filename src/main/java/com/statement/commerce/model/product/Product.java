@@ -18,7 +18,7 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 public class Product
 {
   @JestId
-  private String id;
+  public String id;
   private ProductType productType = ProductType.PRODUCT;
   private String externalSystemId;
   private String productName;

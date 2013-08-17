@@ -8,11 +8,10 @@
   <logger name="org.apache" level="ERROR"/>
   <logger name="org.springframework.security" level="ERROR"/>
   <logger name="com.statement.commerce.controller" level="INFO"/>
-  <!--<logger name="com.nike.das.controller" level="INFO"/>-->
-  <logger name="com.statement.commerce.dao" level="INFO"/>
-  <!--<logger name="com.nike.das.LoggingServletFilter" level="INFO"/>-->
+  <logger name="com.statement.commerce.dao.elasticsearch.JestSearchDao" level="debug"/>
 
-  <root level="ERROR">
+
+  <root level="INFO">
     <appender-ref ref="STDOUT" />
   </root>
 

@@ -11,6 +11,7 @@ import com.statement.commerce.model.search.SearchResults;
  */
 public interface SearchDao<SearchCriteria>
 {
-  SearchResults<Product> search(SearchCriteria criteria);
-  SearchResults<Product> termSearch(SearchCriteria criteria);
+  SearchResults<Product> search(SearchCriteria criteria) throws DataException;
+  SearchResults<Product> termSearch(SearchCriteria criteria) throws DataException;
+  Product[] addProducts(Product... products) throws DataException;
 }

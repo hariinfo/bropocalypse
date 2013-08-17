@@ -25,6 +25,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 public class MerchantController
 {
   private static final Log LOG = LogFactory.getLog(MerchantController.class);
+
   private static final String MERCHANT_BY_NAME = ControllerConstants.CURRENT_VERSION + "merchant/name";
   private static final String MERCHANT = ControllerConstants.CURRENT_VERSION + "merchant";
   private static final String UPDATE_MERCHANT_ADDRESS = ControllerConstants.CURRENT_VERSION + "merchant/{id}/address";

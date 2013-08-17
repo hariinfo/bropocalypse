@@ -10,6 +10,7 @@
   <logger name="com.statement.commerce.controller" level="INFO"/>
   <logger name="com.statement.commerce.service" level="INFO"/>
   <logger name="com.statement.commerce.dao" level="INFO"/>
+  <logger name="com.statement.commerce.dao.elasticsearch.JestSearchDao" level="debug"/>
   <!--<logger name="com.nike.das.LoggingServletFilter" level="INFO"/>-->
 
   <root level="ERROR">

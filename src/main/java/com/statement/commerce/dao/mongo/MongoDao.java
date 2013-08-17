@@ -5,8 +5,8 @@ import com.mongodb.DBCollection;
 import com.mongodb.ReadPreference;
 import com.mongodb.ReplicaSetStatus;
 import com.mongodb.WriteConcern;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
@@ -27,7 +27,7 @@ public class MongoDao
   private String WRITE_CONCERN_DETERMINATION_LOG           = "] WriteConcern determination";
   private String COLLECTION_LOG                            = "] collection [";
 
-  private static final Log           LOG                                              = LogFactory.getLog(MongoDao.class);
+  private static final Logger LOG                                              = LoggerFactory.getLogger(MongoDao.class);
   public static final int            DESCENDING_SORT_ORDER                            = -1;
   public static final String         NOT_IN_OPERATOR                                  = "$nin";
   private static final String        NULL_MONGODB_DATABASE_PREVENTING_COLLECTION      = "Null mongodb database preventing collection [";

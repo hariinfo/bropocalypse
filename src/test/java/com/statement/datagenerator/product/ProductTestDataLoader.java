@@ -1,28 +1,42 @@
 package com.statement.datagenerator.product;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
 import com.statement.commerce.context.AppContext;
 import com.statement.commerce.context.LocalProfile;
+import com.statement.commerce.dao.elasticsearch.JestConstants;
+import com.statement.commerce.dao.elasticsearch.JestDataConfig;
+import com.statement.commerce.dao.elasticsearch.JestSearchDao;
 import com.statement.commerce.dao.elasticsearch.TestProductDataConfig;
 import com.statement.commerce.model.product.Product;
+import com.statement.commerce.model.product.ProductType;
 import io.searchbox.client.JestClient;
 import io.searchbox.client.JestResult;
 import io.searchbox.client.config.ClientConfig;
 import io.searchbox.core.Bulk;
+import io.searchbox.core.Get;
 import io.searchbox.core.Index;
+import io.searchbox.core.Search;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.IndicesExists;
+import io.searchbox.params.SearchType;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang.StringUtils;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.WildcardQueryBuilder;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import org.testng.log4testng.Logger;
@@ -41,6 +55,8 @@ public class ProductTestDataLoader extends AbstractTestNGSpringContextTests
   private static final Logger LOG = Logger.getLogger(ProductTestDataLoader.class);
   @Autowired
   private TestProductDataConfig testProductDataConfig;
+  @Autowired
+  private JestSearchDao dao;
   private JestClient client;
 
   @Test(groups = "DataLoader")
@@ -48,6 +64,7 @@ public class ProductTestDataLoader extends AbstractTestNGSpringContextTests
   {
     URL url = ProductTestDataLoader.class.getResource(testProductDataConfig.getDataFile());
     URI uri = url.toURI();
+    // read the data file; each line in the file is one valid JSon value
     List<String> productLines = Files.readAllLines(Paths.get(uri), Charset.defaultCharset());
 
     ObjectMapper mapper = new ObjectMapper();
@@ -55,17 +72,84 @@ public class ProductTestDataLoader extends AbstractTestNGSpringContextTests
         .defaultIndex(testProductDataConfig.getIndexName())
         .defaultType(testProductDataConfig.getIndexType());
 
+    List<Product> productList = new ArrayList<>();
     for(String product : productLines)
     {
       Product product1 = mapper.readValue(product, Product.class);
       builder.addAction(new Index.Builder(product1).build());
+      productList.add(product1);
     }
 
-    client.execute(builder.build());
+    JestResult result = client.execute(builder.build());
+
+    Assert.assertTrue(result.isSucceeded(), "The operation did not succeed");
+    JsonArray itemsArray = (JsonArray)result.getJsonObject().get("items");
+    Assert.assertEquals(itemsArray.size(), productList.size(), "The resulting list is not the same as the input list of products");
+
+    Product[] productArray = dao.processResultSet(result, productList.toArray(new Product[productList.size()]));
+    for(Product p : productArray)
+    {
+      Assert.assertTrue(StringUtils.isNotEmpty(p.getId()));
+    }
+  }
+
+  @Test(groups = "DataLoader", enabled = false)
+  public void testIndexProduct() throws Exception
+  {
+    Product product = new Product();
+    product.setProductName("Irene1");
+    product.setProductType(ProductType.PRODUCT);
+    product.setRetailPrice(99.99);
+//    product.setId("dedrick1");
+
+    Index.Builder builder = new Index.Builder(product).index(testProductDataConfig.getIndexName()).type(testProductDataConfig.getIndexType());
+    JestResult result = client.execute(builder.build());
+    Assert.assertTrue(result.isSucceeded());
+    String id = result.getJsonObject().get(JestConstants.ID_FIELD).getAsString();
+    product.setId(id);
+  }
+
+  @Test(groups = "DataLoader", enabled = false)
+  public void testGetById() throws Exception
+  {
+    Get.Builder builder = new Get.Builder("rBFzxrvyTOu94BqqywZayw").index(testProductDataConfig.getIndexName()).type(testProductDataConfig.getIndexType());
+
+    JestResult result = client.execute(builder.build());
+
+    Assert.assertNotNull(result);
+    Product product = result.getSourceAsObject(Product.class);
+    Assert.assertTrue(StringUtils.isNotEmpty(product.getId()));
+  }
+
+  @Test(groups = "DataLoader", enabled = false)
+  public void testSearch() throws Exception
+  {
+    SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+//    searchSourceBuilder.query(QueryBuilders.matchQuery("user", "kimchy"));
+//    searchSourceBuilder.query(QueryBuilders.wildcardQuery("productName", "FOUR INCH BAGGY SHORT"));
+    searchSourceBuilder.query(QueryBuilders.wildcardQuery("upc","008*"));
+//    searchSourceBuilder.query(QueryBuilders.termQuery("retailPrice",35.0));
+//    searchSourceBuilder.query(QueryBuilders.wildcardQuery("retailPrice","3"));
+    searchSourceBuilder.size(100);
+
+    // Need to figure this out
+    Search.Builder builder = new Search.Builder(searchSourceBuilder.toString()).
+        addIndex(testProductDataConfig.getIndexName()).
+        addType(testProductDataConfig.getIndexType());
+
+    JestResult result = client.execute(builder.build());
+    LOG.error(result.getSourceAsObjectList(Product.class).size());
+
+    if(!result.isSucceeded())
+    {
+      LOG.error(result.getErrorMessage());
+    }
+
+    Assert.assertTrue(result.isSucceeded());
   }
 
   @Test(groups = "DropData")
-  public void clearDataByType() throws Exception
+  public void clearProductData() throws Exception
   {
     DeleteIndex deleteIndex = new DeleteIndex.Builder(testProductDataConfig.getIndexName()).build();
     JestResult result = client.execute(deleteIndex);
