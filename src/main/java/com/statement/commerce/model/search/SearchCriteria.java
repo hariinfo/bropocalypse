@@ -6,11 +6,18 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class SearchCriteria implements Serializable
 {
+  private static final String[] TERM_FIELDS = {"productName","colorName","upc"};
   private static final long serialVersionUID = -7986954969909435565L;
   private User user;
   private String searchTerm = "";
   private int maxRows          = 10;
   private int startIndex       = 0;
+
+
+  public static String[] getTermFields()
+  {
+    return TERM_FIELDS;
+  }
 
   public String getSearchTerm()
   {

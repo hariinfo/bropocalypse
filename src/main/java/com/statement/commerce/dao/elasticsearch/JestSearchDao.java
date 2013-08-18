@@ -13,12 +13,16 @@ import io.searchbox.client.config.ClientConfig;
 import io.searchbox.core.Bulk;
 import io.searchbox.core.Index;
 import io.searchbox.core.MultiGet;
+import io.searchbox.core.Search;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.IndicesExists;
 import java.util.Arrays;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.QueryStringQueryBuilder;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,9 +51,55 @@ public class JestSearchDao implements SearchDao<SearchCriteria>
   }
 
   @Override
-  public SearchResults<Product> termSearch(SearchCriteria searchCriteria)
+  public SearchResults<Product> termSearch(SearchCriteria searchCriteria) throws DataException
   {
-    return null;  //To change body of implemented methods use File | Settings | File Templates.
+    SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+    QueryStringQueryBuilder queryStringQueryBuilder = QueryBuilders.queryString(searchCriteria.getSearchTerm());
+    searchSourceBuilder.query(queryStringQueryBuilder);
+    searchSourceBuilder.size(searchCriteria.getMaxRows());
+    searchSourceBuilder.from(searchCriteria.getStartIndex());
+
+    // add the term fields
+    for(String field : SearchCriteria.getTermFields())
+    {
+      queryStringQueryBuilder.field(field);
+    }
+
+    // log the query
+    LOG.error(searchSourceBuilder.toString());
+    System.out.println(searchSourceBuilder.toString());
+
+    // build the query builder
+    Search.Builder builder = new Search.Builder(searchSourceBuilder.toString()).
+        addIndex(productDataConfig.getIndexName()).
+        addType(productDataConfig.getIndexType());
+
+
+    SearchResults<Product> searchResults = new SearchResults<>();
+
+    try
+    {
+      // execute the query
+      JestResult jestResult = client.execute(builder.build());
+
+      // check for errors
+      checkForResultError(jestResult);
+
+      // setup the results
+      searchResults.setResults(jestResult.getSourceAsObjectList(Product.class));
+      searchResults.setResultType(Product.class);
+      // set the total hits - total results
+//      searchResults.setResultCount(jestResult.get);
+      searchResults.setPageSize(searchCriteria.getMaxRows());
+      searchResults.setPageNumber(searchCriteria.getPage());
+      searchResults.setSearchCriteria(searchCriteria);
+    }
+    catch(Exception e)
+    {
+      throw new DataException("Error executing term search", e);
+    }
+
+    return searchResults;
   }
 
   public Product[] addProducts(Product... products) throws DataException

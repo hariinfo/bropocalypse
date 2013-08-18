@@ -30,8 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.index.query.QueryStringQueryBuilder;
 import org.elasticsearch.index.query.WildcardQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.facet.FacetBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -121,16 +123,23 @@ public class ProductTestDataLoader extends AbstractTestNGSpringContextTests
     Assert.assertTrue(StringUtils.isNotEmpty(product.getId()));
   }
 
-  @Test(groups = "DataLoader", enabled = false)
+  @Test(groups = "DataLoader", enabled = true)
   public void testSearch() throws Exception
   {
     SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
 //    searchSourceBuilder.query(QueryBuilders.matchQuery("user", "kimchy"));
 //    searchSourceBuilder.query(QueryBuilders.wildcardQuery("productName", "FOUR INCH BAGGY SHORT"));
-    searchSourceBuilder.query(QueryBuilders.wildcardQuery("upc","008*"));
+    QueryStringQueryBuilder queryStringQueryBuilder = QueryBuilders.queryString("TEAM SPOR*");
+    searchSourceBuilder.query(queryStringQueryBuilder.field("productName").field("upc")); // .defaultField("productName")
+//    searchSourceBuilder.facet(new FacetBuilder());
+    searchSourceBuilder.from(0);
+    searchSourceBuilder.size(100);
+
+    LOG.error(searchSourceBuilder.toString());
+//    searchSourceBuilder.query(QueryBuilders.wildcardQuery("upc","008*"));
 //    searchSourceBuilder.query(QueryBuilders.termQuery("retailPrice",35.0));
 //    searchSourceBuilder.query(QueryBuilders.wildcardQuery("retailPrice","3"));
-    searchSourceBuilder.size(100);
+
 
     // Need to figure this out
     Search.Builder builder = new Search.Builder(searchSourceBuilder.toString()).
@@ -144,6 +153,16 @@ public class ProductTestDataLoader extends AbstractTestNGSpringContextTests
     {
       LOG.error(result.getErrorMessage());
     }
+    else
+    {
+      List<Product> productList = result.getSourceAsObjectList(Product.class);
+      int max = 10;
+      for(int i = 0; i < max && i < productList.size(); ++i)
+      {
+        LOG.error(productList.get(i));
+      }
+    }
+
 
     Assert.assertTrue(result.isSucceeded());
   }

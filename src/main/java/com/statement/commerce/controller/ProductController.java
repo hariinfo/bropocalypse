@@ -22,10 +22,12 @@ import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
+import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.search.facet.Facets;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
@@ -52,7 +54,7 @@ public class ProductController
     client = client.addTransportAddress(new InetSocketTransportAddress("localhost", 9300));
 //    return (Client) transportClient;
 
-
+//    ImmutableSettings.settingsBuilder().loadFromSource(jsonBuilder().startObject().startObject("analyzer"))
     DeleteIndexRequestBuilder deleteBuilder = client.admin().indices().prepareDelete("bropocalypse");
     deleteBuilder.execute().actionGet();
 
