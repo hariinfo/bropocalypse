@@ -24,6 +24,7 @@ public class Product
   private String productName;
   private Double retailPrice;
   private Double wholesalePrice;
+  private String primaryColor;
   private List<ProductSize> sizes = new ArrayList<>();
   private Map<String, Object> customAttributes = new HashMap<>();
 
@@ -115,6 +116,16 @@ public class Product
   public void setSizes(List<ProductSize> sizes)
   {
     this.sizes = sizes;
+  }
+
+  public String getPrimaryColor()
+  {
+    return primaryColor;
+  }
+
+  public void setPrimaryColor(String primaryColor)
+  {
+    this.primaryColor = primaryColor;
   }
 
   @Override

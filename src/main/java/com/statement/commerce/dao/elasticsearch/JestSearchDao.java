@@ -35,7 +35,7 @@ import org.springframework.stereotype.Repository;
  * Time: 10:01 PM
  * To change this template use File | Settings | File Templates.
  */
-@Repository
+@Repository("JestSearchDao")
 public class JestSearchDao implements SearchDao<SearchCriteria>
 {
   private static final Logger LOG = LoggerFactory.getLogger(JestSearchDao.class);
@@ -66,8 +66,8 @@ public class JestSearchDao implements SearchDao<SearchCriteria>
     }
 
     // log the query
-    LOG.error(searchSourceBuilder.toString());
-    System.out.println(searchSourceBuilder.toString());
+    LOG.debug(searchSourceBuilder.toString());
+//    System.out.println(searchSourceBuilder.toString());
 
     // build the query builder
     Search.Builder builder = new Search.Builder(searchSourceBuilder.toString()).
@@ -88,8 +88,10 @@ public class JestSearchDao implements SearchDao<SearchCriteria>
       // setup the results
       searchResults.setResults(jestResult.getSourceAsObjectList(Product.class));
       searchResults.setResultType(Product.class);
-      // set the total hits - total results
-//      searchResults.setResultCount(jestResult.get);
+      // TODO - set the total hits - total results
+
+      long totalHits = jestResult.getJsonObject().getAsJsonObject("hits").get("total").getAsLong();
+      searchResults.setResultCount(totalHits);
       searchResults.setPageSize(searchCriteria.getMaxRows());
       searchResults.setPageNumber(searchCriteria.getPage());
       searchResults.setSearchCriteria(searchCriteria);
@@ -129,6 +131,7 @@ public class JestSearchDao implements SearchDao<SearchCriteria>
     return results;
   }
 
+  @Override
   public Product[] getByIds(String... ids) throws DataException
   {
     MultiGet.Builder.ById builder = new MultiGet.Builder.ById(productDataConfig.getIndexName(), productDataConfig.getIndexType());
@@ -172,7 +175,7 @@ public class JestSearchDao implements SearchDao<SearchCriteria>
   @PostConstruct
   public void init() throws Exception
   {
-    LOG.error("Starting up JestSearchDao.");
+    LOG.info("Starting up JestSearchDao.");
     // Configuration
     ClientConfig clientConfig = new ClientConfig.Builder(productDataConfig.getServerUrl()).multiThreaded(true).build();
 

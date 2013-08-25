@@ -5,10 +5,9 @@ import com.statement.commerce.model.user.Role;
 import com.statement.commerce.model.user.User;
 import com.statement.commerce.service.UserService;
 import java.util.List;
-import java.util.TimeZone;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,8 +30,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 @Controller
 public class UserController
 {
-  private static final Log LOG = LogFactory.getLog(MerchantController.class);
-
+  private static final Logger LOG = LoggerFactory.getLogger(MerchantController.class);
 
   private static final String USER = ControllerConstants.CURRENT_VERSION + "user";
   private static final String ACTIVE_USER = USER + "/active";

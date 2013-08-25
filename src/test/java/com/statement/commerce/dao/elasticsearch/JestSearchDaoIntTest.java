@@ -41,7 +41,7 @@ public class JestSearchDaoIntTest extends AbstractTestNGSpringContextTests
 
     Assert.assertNotNull(results, "the search result wrapper object should never be null");
     // uncomment once we have total result count set by the DAO
-//    Assert.assertTrue(results.getResultCount() > 0);
+    Assert.assertTrue(results.getResultCount() > 0);
     Assert.assertFalse(results.getResults().isEmpty(), "the results list should not be empty");
     Assert.assertEquals(results.getResults().size(), maxResults, "the result set size should match");
   }

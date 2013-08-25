@@ -10,8 +10,6 @@ import com.statement.commerce.model.user.User;
 import java.util.List;
 import java.util.TimeZone;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

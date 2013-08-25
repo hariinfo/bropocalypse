@@ -80,6 +80,11 @@ public class SearchCriteria implements Serializable
    */
   public String getLanguageCode()
   {
+    if(null == getUser())
+    {
+      return null;
+    }
+
     return getUser().getLocaleObject().getLanguage().toLowerCase();
   }
 

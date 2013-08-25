@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <title>Product Search</title>
+    <meta charset="utf-8">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="/bropocalypse/static/css/admin.css"/>
+    <script src="/bropocalypse/static/js/jquery-1.7.1.min.js"></script>
+    <script src="/bropocalypse/static/js/jquery.autosize.js"></script>
+    <script src="/bropocalypse/static/js/admin.js"></script>
+    <script type="text/javascript">
+        var getProductsByIds = function () {
+            var form = $("#getProductsByIds");
+            var productIds = $(".ids", form).val();
+            var url = "/bropocalypse/v1/productsearch/" +productIds+ ".json";
+            get(url);
+        };
+        var searchTerm = function () {
+            var form = $("#searchTerm");
+            var term = $(".term", form).val();
+            var maxResults = $(".maxResults", form).val();
+            var url = "/bropocalypse/v1/productsearch/termsearch/" +term+ ".json?maxresults=" + maxResults;
+            get(url);
+        };
+
+//        var createMerchant = function() {
+//            var form = $("#createMerchant");
+//            var merchantJson = $(".merchantJson", form).val();
+//            var url = "/bropocalypse/v1/merchant.json";
+//            post(url, merchantJson);
+//        };
+//        var createMerchantByName = function() {
+//            var form = $("#createMerchantByName");
+//            var merchantName = $(".merchantName", form).val();
+//            var url = "/bropocalypse/v1/merchant/name.json";
+//            post(url, merchantName);
+//        };
+//        var getMerchantById = function () {
+//            var form = $("#getMerchantById");
+//            var merchantIds = $(".merchantId", form).val();
+//            var url = "/bropocalypse/v1/merchant/" +merchantIds+ ".json";
+//            get(url);
+//        };
+//        var putMerchantAddress = function () {
+//            var form = $("#putMerchantAddress");
+//            var merchantId = $(".merchantId", form).val();
+//            var address = $(".address", form).val();
+//            var url = "/bropocalypse/v1/merchant/" +merchantId+ "/address.json";
+//            put (url, address);
+//        }
+//        var deleteMerchantsByIds = function () {
+//            var form = $("#deleteMerchantsByIds");
+//            var merchantIds = $(".merchantIds", form).val();
+//            var url = "/bropocalypse/v1/merchant/" + merchantIds + ".json";
+//            del(url);
+//        };
+
+    </script>
+</head>
+<body>
+<h3><a href="webservices.html">Web Services</a> </h3>
+
+<div class="webservice">
+    <b>Get Products by Ids</b></br>
+    URL = /bropocalypse/v1/productsearch/{ids}.json<br>
+    <form id="getProductsByIds">
+        <table>
+            <tr>
+                <td>Product Ids: <input class="ids" name="ids" value=""></td>
+            </tr>
+            <tr>
+                <td><input onclick="getProductsByIds()" value="GET" type=button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<div class="webservice">
+    <b>Search Products - Terms</b></br>
+    URL = /bropocalypse/v1/productsearch/termsearch/{term}.json<br>
+    <form id="searchTerm">
+        <table>
+            <tr>
+                <td>Term: <input class="term" name="term" value=""></td>
+            </tr>
+            <tr>
+                <td>Max Results: <input class="maxResults" name="maxResults" value=""></td>
+            </tr>
+            <tr>
+                <td><input onclick="searchTerm()" value="GET" type=button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+
+
+<!--<div class="webservice">-->
+    <!--<b>Get Merchant by id</b></br>-->
+    <!--URL = /bropocalypse/v1/merchant/{id}.json<br>-->
+    <!--<a href="/bropocalypse/docs/RestApi.html#/v1/merchant/{id}/address_PUT">PUT REST docs</a>-->
+    <!--<form id="getMerchantById">-->
+        <!--<table>-->
+            <!--<tr>-->
+                <!--<td>Merchant Id: <input class="merchantId" name="merchantId" value=""></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td><input onclick="getMerchantById()" value="GET" type=button></td>-->
+            <!--</tr>-->
+        <!--</table>-->
+    <!--</form>-->
+<!--</div>-->
+
+<!--<div class="webservice">-->
+    <!--<b>Create new Merchant by Name</b></br>-->
+    <!--URL = /bropocalypse/v1/merchant/name.json<br>-->
+    <!--<a href="/bropocalypse/docs/RestApi.html#/v1/merchant/name_POST">POST REST docs</a>-->
+    <!--<form id="createMerchantByName">-->
+        <!--<table>-->
+            <!--<tr>-->
+                <!--<td>Merchant Name: <input type="text" class="merchantName" name="merchantName" value=""></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td><input onclick="createMerchantByName()" value="POST" type=button></td>-->
+            <!--</tr>-->
+        <!--</table>-->
+    <!--</form>-->
+<!--</div>-->
+
+<!--<div class="webservice">-->
+    <!--<b>Get Merchant by id</b></br>-->
+    <!--URL = /bropocalypse/v1/merchant/{id}.json<br>-->
+    <!--<a href="/bropocalypse/docs/RestApi.html#/v1/merchant/{id}/address_PUT">PUT REST docs</a>-->
+    <!--<form id="getMerchantById">-->
+        <!--<table>-->
+            <!--<tr>-->
+                <!--<td>Merchant Id: <input class="merchantId" name="merchantId" value=""></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td><input onclick="getMerchantById()" value="GET" type=button></td>-->
+            <!--</tr>-->
+        <!--</table>-->
+    <!--</form>-->
+<!--</div>-->
+
+<!--<div class="webservice">-->
+    <!--<b>PUT Merchant Address</b></br>-->
+    <!--URL = /bropocalypse/v1/merchant/{id}/address.json<br>-->
+    <!--<a href="/bropocalypse/docs/RestApi.html#/v1/merchant/{id}_GET">GET REST docs</a>-->
+    <!--<form id="putMerchantAddress">-->
+        <!--<table>-->
+            <!--<tr>-->
+                <!--<td>Merchant Id: <input class="merchantId" name="merchantId" value=""></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td>Address: <input class="address" name='address' value='{"name":"Primary Address","address1":"1 Hollywood Ave","city":"Portland","provence":"OREGON","country":"US","zipCode":"97212"}'></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td><input onclick='putMerchantAddress()' value='PUT' type=button></td>-->
+            <!--</tr>-->
+        <!--</table>-->
+    <!--</form>-->
+<!--</div>-->
+
+<!--<div class="webservice">-->
+    <!--<b>Delete merchants by ID</b></br>-->
+    <!--URL = DELETE /bropocalypse/v1/merchant/{id}.json<br>-->
+    <!--<a href="/bropocalypse/docs/RestApi.html#/v1/merchant/{id}_DELETE">DELETE REST docs</a><br>-->
+    <!--<form id="deleteMerchantsByIds">-->
+        <!--<table>-->
+            <!--<tr>-->
+                <!--<td>Merchant Ids: <input class="merchantIds" name='merchantIds' value=''></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+                <!--<td><input onclick='deleteMerchantsByIds()' value='DELETE' type=button></td>-->
+            <!--</tr>-->
+        <!--</table>-->
+    <!--</form>-->
+<!--</div>-->
+
+
+<h3>Results:</h3>
+<div id='url'></div>
+<table>
+    RequestBody
+    <tr>
+        <td><textarea id="requestBody" cols="120" rows="5"></textarea></td>
+    </tr>
+</table>
+<pre id='results'></pre>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+</body>
+</html>

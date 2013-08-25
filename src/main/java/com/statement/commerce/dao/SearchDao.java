@@ -14,4 +14,5 @@ public interface SearchDao<SearchCriteria>
   SearchResults<Product> search(SearchCriteria criteria) throws DataException;
   SearchResults<Product> termSearch(SearchCriteria criteria) throws DataException;
   Product[] addProducts(Product... products) throws DataException;
+  Product[] getByIds(String... ids) throws DataException;
 }

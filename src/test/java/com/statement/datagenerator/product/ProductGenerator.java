@@ -35,7 +35,8 @@ public class ProductGenerator
     product.addCustomAtrribute("color" ,nikeProduct.getColor());
     product.addCustomAtrribute("style", nikeProduct.getStyle());
     product.addCustomAtrribute("division", nikeProduct.getDivision().name());
-
+    String[] colorFields = nikeProduct.getColorName().split("/");
+    product.setPrimaryColor(colorFields[0]);
     List<ProductSize> sizes = new ArrayList<>();
     product.setSizes(sizes);
 
@@ -85,7 +86,7 @@ public class ProductGenerator
 //    product.setSizes(generateApparelSizes(4, false, product));
     ObjectMapper m = new ObjectMapper();
 
-    try(FileOutputStream FOS = new FileOutputStream("apparelData_singleProduct.json"))
+    try(FileOutputStream FOS = new FileOutputStream("apparelData.json"))
     {
       for(Product product : allProducts)
       {
