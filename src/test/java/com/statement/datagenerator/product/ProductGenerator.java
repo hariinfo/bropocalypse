@@ -1,6 +1,7 @@
 package com.statement.datagenerator.product;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.statement.commerce.model.core.MultilingualString;
 import com.statement.commerce.model.product.Product;
 import com.statement.commerce.model.product.ProductSize;
 import com.statement.util.XstreamMockDataProvider;
@@ -30,7 +31,8 @@ public class ProductGenerator
     product.setExternalSystemId(nikeProduct.getId());
     product.setRetailPrice(getDoubleFromBigDecimal(nikeProduct.getRetailPrice()));
     product.setWholesalePrice(getDoubleFromBigDecimal(nikeProduct.getWholesalePrice()));
-    product.setProductName(nikeProduct.getStyleName());
+//    product.setPrimaryProductName(nikeProduct.getStyleName());
+    product.setProductName(new MultilingualString("en_US", nikeProduct.getStyleName()));
     product.addCustomAtrribute("colorName", nikeProduct.getColorName());
     product.addCustomAtrribute("color" ,nikeProduct.getColor());
     product.addCustomAtrribute("style", nikeProduct.getStyle());
@@ -79,7 +81,7 @@ public class ProductGenerator
 
 //    Product product = new Product();
 //    product.setExternalSystemId("cat260470195-111432-011");
-//    product.setProductName("FOUR INCH BAGGY SHORT");
+//    product.setPrimaryProductName("FOUR INCH BAGGY SHORT");
 //    product.setRetailPrice(50.50d);
 //    product.setWholesalePrice(22.95d);
 //

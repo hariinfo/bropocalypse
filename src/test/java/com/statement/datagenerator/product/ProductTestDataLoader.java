@@ -5,9 +5,9 @@ import com.google.gson.JsonArray;
 import com.statement.commerce.context.AppContext;
 import com.statement.commerce.context.LocalProfile;
 import com.statement.commerce.dao.elasticsearch.JestConstants;
-import com.statement.commerce.dao.elasticsearch.JestDataConfig;
 import com.statement.commerce.dao.elasticsearch.JestSearchDao;
 import com.statement.commerce.dao.elasticsearch.TestProductDataConfig;
+import com.statement.commerce.model.core.MultilingualString;
 import com.statement.commerce.model.product.Product;
 import com.statement.commerce.model.product.ProductType;
 import io.searchbox.client.JestClient;
@@ -20,7 +20,6 @@ import io.searchbox.core.Search;
 import io.searchbox.indices.CreateIndex;
 import io.searchbox.indices.DeleteIndex;
 import io.searchbox.indices.IndicesExists;
-import io.searchbox.params.SearchType;
 import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -28,12 +27,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.index.query.QueryStringQueryBuilder;
-import org.elasticsearch.index.query.WildcardQueryBuilder;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.elasticsearch.search.facet.FacetBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -99,7 +97,8 @@ public class ProductTestDataLoader extends AbstractTestNGSpringContextTests
   public void testIndexProduct() throws Exception
   {
     Product product = new Product();
-    product.setProductName("Irene1");
+    MultilingualString productName = new MultilingualString("en_US", "Irene1");
+    product.setProductName(productName);
     product.setProductType(ProductType.PRODUCT);
     product.setRetailPrice(99.99);
 //    product.setId("dedrick1");
@@ -130,10 +129,12 @@ public class ProductTestDataLoader extends AbstractTestNGSpringContextTests
 //    searchSourceBuilder.query(QueryBuilders.matchQuery("user", "kimchy"));
 //    searchSourceBuilder.query(QueryBuilders.wildcardQuery("productName", "FOUR INCH BAGGY SHORT"));
     QueryStringQueryBuilder queryStringQueryBuilder = QueryBuilders.queryString("TEAM SPOR*");
-    searchSourceBuilder.query(queryStringQueryBuilder.field("productName").field("upc")); // .defaultField("productName")
+    queryStringQueryBuilder.defaultField("productName");
+    searchSourceBuilder.query(queryStringQueryBuilder.field("productName.translatedStrings.*").field("upc")); // .defaultField("productName")
 //    searchSourceBuilder.facet(new FacetBuilder());
     searchSourceBuilder.from(0);
     searchSourceBuilder.size(100);
+//    searchSourceBuilder.
 
     LOG.error(searchSourceBuilder.toString());
 //    searchSourceBuilder.query(QueryBuilders.wildcardQuery("upc","008*"));
@@ -156,6 +157,7 @@ public class ProductTestDataLoader extends AbstractTestNGSpringContextTests
     else
     {
       List<Product> productList = result.getSourceAsObjectList(Product.class);
+      Assert.assertFalse(productList.isEmpty(), "We should have received search results!");
       int max = 10;
       for(int i = 0; i < max && i < productList.size(); ++i)
       {

@@ -1,5 +1,7 @@
 package com.statement.commerce.model.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.statement.commerce.model.core.MultilingualString;
 import io.searchbox.annotations.JestId;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,12 +23,15 @@ public class Product
   public String id;
   private ProductType productType = ProductType.PRODUCT;
   private String externalSystemId;
-  private String productName;
+  private MultilingualString productName;
   private Double retailPrice;
   private Double wholesalePrice;
   private String primaryColor;
   private List<ProductSize> sizes = new ArrayList<>();
   private Map<String, Object> customAttributes = new HashMap<>();
+  private String url;
+  private String category;
+  private String catalogId;
 
   public String getId()
   {
@@ -78,12 +83,34 @@ public class Product
     this.externalSystemId = externalSystemId;
   }
 
-  public String getProductName()
+  @JsonIgnore
+  public String getPrimaryProductName()
+  {
+    String name;
+    if(null != productName)
+    {
+      name = productName.getPrimaryString();
+    }
+    else
+    {
+      name = null;
+    }
+
+    return name;
+  }
+
+//
+//  public void setPrimaryProductName(String primaryProductName)
+//  {
+//    this.primaryProductName = primaryProductName;
+//  }
+
+  public MultilingualString getProductName()
   {
     return productName;
   }
 
-  public void setProductName(String productName)
+  public void setProductName(MultilingualString productName)
   {
     this.productName = productName;
   }
@@ -128,6 +155,36 @@ public class Product
     this.primaryColor = primaryColor;
   }
 
+  public String getUrl()
+  {
+    return url;
+  }
+
+  public void setUrl(String url)
+  {
+    this.url = url;
+  }
+
+  public String getCategory()
+  {
+    return category;
+  }
+
+  public void setCategory(String category)
+  {
+    this.category = category;
+  }
+
+  public String getCatalogId()
+  {
+    return catalogId;
+  }
+
+  public void setCatalogId(String catalogId)
+  {
+    this.catalogId = catalogId;
+  }
+
   @Override
   public String toString()
   {
@@ -160,6 +217,10 @@ public class Product
     {
       return false;
     }
+    if (catalogId != null ? !catalogId.equals(product.catalogId) : product.catalogId != null)
+    {
+      return false;
+    }
     if (productType != product.productType)
     {
       return false;
@@ -175,6 +236,7 @@ public class Product
     result = 31 * result + (productType != null ? productType.hashCode() : 0);
     result = 31 * result + (externalSystemId != null ? externalSystemId.hashCode() : 0);
     result = 31 * result + (productName != null ? productName.hashCode() : 0);
+    result = 31 * result + (catalogId != null ? catalogId.hashCode() : 0);
     return result;
   }
 }
