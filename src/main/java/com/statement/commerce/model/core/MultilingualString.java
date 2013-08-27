@@ -21,10 +21,12 @@ public class MultilingualString implements Serializable
   private static final long serialVersionUID = -4026866114584924370L;
   private String primaryString;
   private String primaryLocale;
-  private Map<Locale, String> translatedStrings = new HashMap<Locale, String>();
+  private Map<Locale, String> translatedStrings = new HashMap<>();
 
   public MultilingualString()
   {
+    primaryLocale = "en_US";
+    primaryString = "";
   }
 
   public MultilingualString(String defaultLocale, String defaultTranslation)
@@ -33,17 +35,64 @@ public class MultilingualString implements Serializable
 
     if(StringUtils.isEmpty(defaultLocale))
     {
-      throw new IllegalArgumentException("A default local must be provided.");
+      throw new IllegalArgumentException("A default locale must be provided.");
     }
 
-    String[] localeStrings = defaultLocale.split(UNDERSCORE);
+    String[] localeStrings = getLanguageCountryString(defaultLocale);
+
+    primaryString = defaultTranslation;
+    translatedStrings.put(new Locale(localeStrings[0], localeStrings[1]), defaultTranslation);
+  }
+
+  /**
+   * Add or update a current translation; including the primary
+   * @param locale the locale as a string
+   * @param translation the translation to be stored with the provided <code>locale</code> string
+   */
+  public void putTranslation(String locale, String translation)
+  {
+    String[] localeStrings = getLanguageCountryString(locale);
+    Locale localeObject = new Locale(localeStrings[0], localeStrings[1]);
+    translatedStrings.put(localeObject, translation);
+    setupPrimaryIfAppropriate(localeObject, translation);
+  }
+
+  /**
+   * Add or update a current translation; including the primary
+   * @param locale the locale
+   * @param translation the translation to be stored with the provided <code>locale</code>
+   */
+  public void putTranslation(Locale locale, String translation)
+  {
+    if(null == locale)
+    {
+      throw new IllegalArgumentException("The provided locale was null.");
+    }
+
+    translatedStrings.put(locale, translation);
+    setupPrimaryIfAppropriate(locale, translation);
+  }
+
+  private void setupPrimaryIfAppropriate(Locale locale, String translation)
+  {
+    String[] localeStrings = getLanguageCountryString(primaryLocale);
+    Locale currentPrimaryLocal = new Locale(localeStrings[0], localeStrings[1]);
+    if(locale.equals(currentPrimaryLocal))
+    {
+      primaryString = translation;
+    }
+  }
+
+  private String[] getLanguageCountryString(String locale)
+  {
+    String[] localeStrings = locale.split(UNDERSCORE);
 
     if(localeStrings.length != 2)
     {
       throw new IllegalArgumentException("Improper format provided. Expected language_Country combination only. Example: 'en_US'");
     }
-    primaryString = defaultTranslation;
-    translatedStrings.put(new Locale(localeStrings[0], localeStrings[1]), defaultTranslation);
+
+    return localeStrings;
   }
 
   public String getPrimaryString()
